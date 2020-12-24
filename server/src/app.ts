@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express'
 
-const PORT: string | number = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000
 
 const app: Application = express()
 
