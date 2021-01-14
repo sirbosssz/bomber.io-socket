@@ -1,4 +1,5 @@
 import 'phaser'
+import HomeScene from './scenes/HomeScene'
 
 const [DEFAULT_WIDTH, DEFAULT_HEIGHT, MAX_WIDTH, MAX_HEIGHT] = [
   1024,
@@ -8,7 +9,7 @@ const [DEFAULT_WIDTH, DEFAULT_HEIGHT, MAX_WIDTH, MAX_HEIGHT] = [
 ]
 
 const config: Phaser.Types.Core.GameConfig = {
-  backgroundColor: '#ffffff',
+  backgroundColor: '#fafafa',
   scale: {
     parent: 'app',
     mode: Phaser.Scale.RESIZE,
@@ -18,5 +19,5 @@ const config: Phaser.Types.Core.GameConfig = {
 }
 
 window.addEventListener('load', () => {
-  const game: Phaser.Game = new Phaser.Game(config)
+  const game = new Phaser.Game(config)
 })
