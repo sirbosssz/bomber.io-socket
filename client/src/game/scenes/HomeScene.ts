@@ -12,10 +12,11 @@ import player_walkright1 from '../assets/character/player/right1.png'
 import player_walkright2 from '../assets/character/player/right2.png'
 
 import Player from '../sprites/Player'
+import IPlayerCursor from '../types/IPlayerCursor'
 
 export default class HomeScene extends Phaser.Scene {
   private player: Player
-  private playerCursor: Phaser.Types.Input.Keyboard.CursorKeys
+  private playerCursor: IPlayerCursor
 
   constructor() {
     super({ key: 'HomeScene' })
@@ -43,7 +44,13 @@ export default class HomeScene extends Phaser.Scene {
     this.player = new Player(this, 100, 100)
     this.player.setCollideWorldBounds(true)
 
-    this.playerCursor = this.input.keyboard.createCursorKeys()
+    this.playerCursor = this.input.keyboard.addKeys({
+      up: Phaser.Input.Keyboard.KeyCodes.W,
+      down: Phaser.Input.Keyboard.KeyCodes.S,
+      left: Phaser.Input.Keyboard.KeyCodes.A,
+      right: Phaser.Input.Keyboard.KeyCodes.D,
+    })
+    // this.playerCursor = this.input.keyboard.createCursorKeys()
   }
 
   public update(time: number, delta: number): void {

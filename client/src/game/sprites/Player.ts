@@ -1,5 +1,7 @@
 // import texture from '../assets/character/*.png'
 
+import IPlayerCursor from '../types/IPlayerCursor'
+
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'player_idle')
@@ -7,7 +9,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this)
     scene.physics.add.existing(this)
 
-    const walkFramerate = 10
+    const walkFramerate = 6
+
+    // animation
+    // walk
 
     scene.anims.create({
       key: 'walkdown',
@@ -54,72 +59,52 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     })
   }
 
-  private speed = 600
-  moveControl(keyboard: Phaser.Types.Input.Keyboard.CursorKeys): void {
+  private speed: number = 400
+  private status: string = 'idle'
+  moveControl(keyboard: IPlayerCursor): void {
     this.setVelocity(0)
-    this.anims.stop()
 
     if (keyboard.left.isDown) {
       this.setVelocityX(-this.speed)
       this.anims.play('walkleft', true)
+      this.status = 'turnleft'
     } else if (keyboard.right.isDown) {
       this.setVelocityX(this.speed)
       this.anims.play('walkright', true)
-    }
-
-    if (keyboard.down.isDown) {
+      this.status = 'turnright'
+    } else if (keyboard.down.isDown) {
       this.setVelocityY(this.speed)
       this.anims.play('walkdown', true)
+      this.status = 'idle'
     } else if (keyboard.up.isDown) {
       this.setVelocityY(-this.speed)
       this.anims.play('walkup', true)
+      this.status = 'turnback'
     }
 
-    // const customKeys = {
-    //   up: Phaser.Input.Keyboard.KeyCodes.W,
-    //   left: Phaser.Input.Keyboard.KeyCodes.A,
-    //   down: Phaser.Input.Keyboard.KeyCodes.S,
-    //   right: Phaser.Input.Keyboard.KeyCodes.D,
-    // }
-
-    // keyboard.on('keydown', (event) => {
-    //   // vertical
-    //   if (event.keyCode == customKeys.down) {
-    //     this.setVelocityY(this.speed)
-    //     this.anims.play('walkdown', true)
-    //   } else if (event.keyCode == customKeys.up) {
-    //     this.setVelocityY(-this.speed)
-    //     this.anims.play('walkup', true)
-    //   }
-
-    //   // horizontal
-    //   if (event.keyCode == customKeys.right) {
-    //     this.setVelocityX(this.speed)
-    //     this.anims.play('walkright', true)
-    //   } else if (event.keyCode == customKeys.left) {
-    //     this.setVelocityX(-this.speed)
-    //     this.anims.play('walkleft', true)
-    //   }
-    // })
-
-    // keyboard.on('keyup', (event) => {
-    //   // vertical
-    //   if (event.keyCode == customKeys.down) {
-    //     this.anims.stop()
-    //     this.setTexture('player_idle')
-    //   } else if (event.keyCode == customKeys.up) {
-    //     this.anims.stop()
-    //     this.setTexture('player_turnback')
-    //   }
-
-    //   // horizontal
-    //   if (event.keyCode == customKeys.right) {
-    //     this.anims.stop()
-    //     this.setTexture('player_turnright')
-    //   } else if (event.keyCode == customKeys.left) {
-    //     this.anims.stop()
-    //     this.setTexture('player_turnleft')
-    //   }
-    // })
+    if (
+      !keyboard.left.isDown &&
+      !keyboard.right.isDown &&
+      !keyboard.down.isDown &&
+      !keyboard.up.isDown
+    ) {
+      this.anims.stop()
+      this.setTexture(`player_${this.status}`)
+      // switch (this.status) {
+      //   case 'down':
+      //     this.setTexture('player_idle')
+      //     break
+      //   case 'up':
+      //     this.setTexture('player_turnback')
+      //     break
+      //   case 'left':
+      //     this.setTexture('player_turnleft')
+      //     break
+      //   case 'right':
+      //     this.setTexture('player_turnright')
+      //   default:
+      //     break
+      // }
+    }
   }
 }
