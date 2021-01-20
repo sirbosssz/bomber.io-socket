@@ -47,8 +47,8 @@ export default class HomeScene extends Phaser.Scene {
   public create(): void {
     // Set World Map
     const world = {
-      x: 64,
-      y: 64,
+      x: 64 * 0,
+      y: 64 * 0,
       width: 64 * 10,
       height: 64 * 10,
     }
@@ -69,19 +69,19 @@ export default class HomeScene extends Phaser.Scene {
     ).setCollideWorldBounds(true)
 
     // FullScreen
-    const fullscreenBtn = this.add
-      .image(0, 0, 'button_test')
-      .setInteractive()
-      .setOrigin(0, 0)
-      .setDisplaySize(64, 64)
+    // const fullscreenBtn = this.add
+    //   .image(0, 0, 'button_test')
+    //   .setInteractive()
+    //   .setOrigin(0, 0)
+    //   .setDisplaySize(64, 64)
 
-    fullscreenBtn.on('pointerup', () => {
-      if (this.scale.isFullscreen) {
-        this.scale.stopFullscreen()
-      } else {
-        this.scale.startFullscreen()
-      }
-    })
+    // fullscreenBtn.on('pointerup', () => {
+    //   if (this.scale.isFullscreen) {
+    //     this.scale.stopFullscreen()
+    //   } else {
+    //     this.scale.startFullscreen()
+    //   }
+    // })
 
     this.playerCursor = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
