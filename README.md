@@ -47,3 +47,38 @@ npm start
 ```
 
 # 👨🏻‍💻 Client
+webgl client that can run in any device
+
+### ⚙️ Tools list
+* [TypeScript](https://www.typescriptlang.org) Language syntax
+* [Phaser.js](https://phaser.io/) WebGL game framework
+## 🚀 Setup
+Setup server by install required modules using [`yarn`](https://yarnpkg.com) or [`npm`](https://www.npmjs.com)
+```bash
+yarn
+```
+or
+```bash
+npm install
+```
+## 🛠 Development Server
+1. Start dev server by using command 
+```bash
+yarn start
+```
+or
+```bash
+npm run start
+```
+2. edit code on directory `/src` only
+
+## 🎬 Production Server
+1. build typescript to node first using command
+```bash
+yarn build
+```
+or
+```bash
+npm run build
+```
+2. copy HTML bundle from `/dist` to web directory
