@@ -3,15 +3,21 @@
 import IPlayerCursor from '../types/IPlayerCursor'
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene: Phaser.Scene, x: number, y: number) {
+  constructor(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    width: number = 128,
+    height: number = 128
+  ) {
     super(scene, x, y, 'player_idle')
 
     scene.add.existing(this)
     scene.physics.add.existing(this)
-
-    const walkFramerate = 6
+    this.setDisplaySize(width, height).setSize(90, 100)
 
     // animation
+    const walkFramerate = 12
     // walk
 
     scene.anims.create({
@@ -59,7 +65,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     })
   }
 
-  private speed: number = 400
+  private speed: number = 300
   private status: string = 'idle'
   moveControl(keyboard: IPlayerCursor): void {
     this.setVelocity(0)

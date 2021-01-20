@@ -41,8 +41,11 @@ export default class HomeScene extends Phaser.Scene {
   }
 
   public create(): void {
-    this.player = new Player(this, 100, 100)
-    this.player.setCollideWorldBounds(true)
+    this.player = new Player(this, 32, 32, 64, 64).setCollideWorldBounds(true)
+
+    const startPoint = this.add.graphics()
+    startPoint.lineStyle(1, 0x00ff00)
+    startPoint.strokeRect(0, 0, 64, 64)
 
     this.playerCursor = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -50,7 +53,8 @@ export default class HomeScene extends Phaser.Scene {
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
     })
-    // this.playerCursor = this.input.keyboard.createCursorKeys()
+
+    console.log(this.player.getBounds())
   }
 
   public update(time: number, delta: number): void {
