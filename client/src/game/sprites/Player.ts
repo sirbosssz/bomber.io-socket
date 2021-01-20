@@ -14,7 +14,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     scene.add.existing(this)
     scene.physics.add.existing(this)
+
     this.setDisplaySize(width, height).setSize(90, 100)
+
+    // this.setDisplaySize((128 / 90) * width, (128 / 100) * height)
+    //   .setSize(90, 100)
 
     // animation
     const walkFramerate = 12
@@ -65,7 +69,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     })
   }
 
-  private speed: number = 300
+  private speed: number = 500
   private status: string = 'idle'
   moveControl(keyboard: IPlayerCursor): void {
     this.setVelocity(0)

@@ -11,6 +11,8 @@ import player_walkleft2 from '../assets/character/player/left2.png'
 import player_walkright1 from '../assets/character/player/right1.png'
 import player_walkright2 from '../assets/character/player/right2.png'
 
+import button_test from '../assets/UI/button/test.png'
+
 import Player from '../sprites/Player'
 import IPlayerCursor from '../types/IPlayerCursor'
 
@@ -38,14 +40,48 @@ export default class HomeScene extends Phaser.Scene {
     this.load.image('player_walkleft2', player_walkleft2)
     this.load.image('player_walkright1', player_walkright1)
     this.load.image('player_walkright2', player_walkright2)
+
+    this.load.image('button_test', button_test)
   }
 
   public create(): void {
-    this.player = new Player(this, 32, 32, 64, 64).setCollideWorldBounds(true)
+    // Set World Map
+    const world = {
+      x: 64,
+      y: 64,
+      width: 64 * 10,
+      height: 64 * 10,
+    }
+    const worldMap = this.add.graphics()
+    worldMap
+      .fillStyle(0x65cbcf, 0.5)
+      .fillRect(world.x, world.y, world.width, world.height)
 
-    const startPoint = this.add.graphics()
-    startPoint.lineStyle(1, 0x00ff00)
-    startPoint.strokeRect(0, 0, 64, 64)
+    this.physics.world.setBounds(world.x, world.y, world.width, world.height)
+
+    // Player
+    this.player = new Player(
+      this,
+      world.x + 32,
+      world.y + 32,
+      64,
+      64
+    ).setCollideWorldBounds(true)
+
+    // FullScreen
+    const fullscreenBtn = this.add
+      .image(0, 0, 'button_test')
+      .setInteractive()
+      .setOrigin(0, 0)
+      .setDisplaySize(64, 64)
+
+    fullscreenBtn.on('pointerup', () => {
+      if (this.scale.isFullscreen) {
+        this.scale.stopFullscreen()
+      } else {
+        this.scale.startFullscreen()
+      }
+    })
 
     this.playerCursor = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -53,8 +89,6 @@ export default class HomeScene extends Phaser.Scene {
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
     })
-
-    console.log(this.player.getBounds())
   }
 
   public update(time: number, delta: number): void {
