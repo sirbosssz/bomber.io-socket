@@ -18,7 +18,7 @@ import IPlayerCursor from '../types/IPlayerCursor'
 
 export default class HomeScene extends Phaser.Scene {
   private player: Player
-  private playerCursor: IPlayerCursor
+  private playerCursor
 
   constructor() {
     super({ key: 'HomeScene' })
@@ -47,8 +47,8 @@ export default class HomeScene extends Phaser.Scene {
   public create(): void {
     // Set World Map
     const world = {
-      x: 64 * 2,
-      y: 64 * 2,
+      x: 64 * 1,
+      y: 64 * 1,
       width: 64 * 10,
       height: 64 * 10,
     }
@@ -84,10 +84,18 @@ export default class HomeScene extends Phaser.Scene {
     // })
 
     this.playerCursor = this.input.keyboard.addKeys({
+      // direction control
       up: Phaser.Input.Keyboard.KeyCodes.W,
       down: Phaser.Input.Keyboard.KeyCodes.S,
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
+
+      alt_up: Phaser.Input.Keyboard.KeyCodes.UP,
+      alt_down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+      alt_left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+      alt_right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+
+      // action control
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
     })
   }

@@ -102,22 +102,34 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.setVelocity(0)
 
     // 4 Direction movement
-    if (keyboard.left.isDown) {
+    if (
+      keyboard.left.isDown ||
+      (keyboard.alt_left !== undefined && keyboard.alt_left.isDown)
+    ) {
       // Left
       this.setVelocityX(-this.speed)
       this.anims.play('walkleft', true)
       this.status = 'turnleft'
-    } else if (keyboard.right.isDown) {
+    } else if (
+      keyboard.right.isDown ||
+      (keyboard.alt_right !== undefined && keyboard.alt_right.isDown)
+    ) {
       // Right
       this.setVelocityX(this.speed)
       this.anims.play('walkright', true)
       this.status = 'turnright'
-    } else if (keyboard.down.isDown) {
+    } else if (
+      keyboard.down.isDown ||
+      (keyboard.alt_down !== undefined && keyboard.alt_down.isDown)
+    ) {
       // Down
       this.setVelocityY(this.speed)
       this.anims.play('walkdown', true)
       this.status = 'idle'
-    } else if (keyboard.up.isDown) {
+    } else if (
+      keyboard.up.isDown ||
+      (keyboard.alt_up !== undefined && keyboard.alt_up.isDown)
+    ) {
       // Up
       this.setVelocityY(-this.speed)
       this.anims.play('walkup', true)
@@ -125,13 +137,34 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (
-      !keyboard.left.isDown &&
-      !keyboard.right.isDown &&
-      !keyboard.down.isDown &&
-      !keyboard.up.isDown
+      keyboard.alt_up !== undefined &&
+      keyboard.alt_down !== undefined &&
+      keyboard.alt_left !== undefined &&
+      keyboard.alt_right !== undefined
     ) {
-      this.anims.stop()
-      this.setTexture(`player_${this.status}`)
+      if (
+        !keyboard.left.isDown &&
+        !keyboard.alt_left.isDown &&
+        !keyboard.right.isDown &&
+        !keyboard.alt_right.isDown &&
+        !keyboard.down.isDown &&
+        !keyboard.alt_down.isDown &&
+        !keyboard.up.isDown &&
+        !keyboard.alt_up.isDown
+      ) {
+        this.anims.stop()
+        this.setTexture(`player_${this.status}`)
+      }
+    } else {
+      if (
+        !keyboard.left.isDown &&
+        !keyboard.right.isDown &&
+        !keyboard.down.isDown &&
+        !keyboard.up.isDown
+      ) {
+        this.anims.stop()
+        this.setTexture(`player_${this.status}`)
+      }
     }
 
     // Skill: Plant a bomb
