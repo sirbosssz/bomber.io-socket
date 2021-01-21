@@ -77,6 +77,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     cooldown: 1000,
     ready: true,
   }
+
+  skillControl(
+    key: Phaser.Input.Keyboard.Key,
+    skill: IPlayerSkill,
+    action: Function
+  ): void {
+    if (key.isDown && skill.ready && (skill.count > 0 || skill.count === -1)) {
+      skill.ready = false
+      action()
+      setTimeout(() => (skill.ready = true), skill.cooldown)
+    }
+  }
+
   moveControl(keyboard: IPlayerCursor): void {
     this.setVelocity(0)
 
@@ -114,14 +127,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     // Skill: Plant a bomb
-    if (
-      keyboard.space.isDown &&
-      this.bomb.ready &&
-      (this.bomb.count > 0 || this.bomb.count === -1)
-    ) {
-      this.bomb.ready = false
-      console.log('Bomb has been planted')
-      setTimeout(() => (this.bomb.ready = true), this.bomb.cooldown)
-    }
+    this.skillControl(keyboard.space, this.bomb, () => {
+      console.log('bomb has been planted')
+    })
   }
 }
