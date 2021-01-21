@@ -1,6 +1,7 @@
 // import texture from '../assets/character/*.png'
 
 import IPlayerCursor from '../types/IPlayerCursor'
+import IPlayerSkill from '../types/IPlayerSkill'
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(
@@ -71,22 +72,32 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   private speed: number = 500
   private status: string = 'idle'
+  private bomb: IPlayerSkill = {
+    count: 1,
+    cooldown: 1000,
+    ready: true,
+  }
   moveControl(keyboard: IPlayerCursor): void {
     this.setVelocity(0)
 
+    // 4 Direction movement
     if (keyboard.left.isDown) {
+      // Left
       this.setVelocityX(-this.speed)
       this.anims.play('walkleft', true)
       this.status = 'turnleft'
     } else if (keyboard.right.isDown) {
+      // Right
       this.setVelocityX(this.speed)
       this.anims.play('walkright', true)
       this.status = 'turnright'
     } else if (keyboard.down.isDown) {
+      // Down
       this.setVelocityY(this.speed)
       this.anims.play('walkdown', true)
       this.status = 'idle'
     } else if (keyboard.up.isDown) {
+      // Up
       this.setVelocityY(-this.speed)
       this.anims.play('walkup', true)
       this.status = 'turnback'
@@ -100,21 +111,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     ) {
       this.anims.stop()
       this.setTexture(`player_${this.status}`)
-      // switch (this.status) {
-      //   case 'down':
-      //     this.setTexture('player_idle')
-      //     break
-      //   case 'up':
-      //     this.setTexture('player_turnback')
-      //     break
-      //   case 'left':
-      //     this.setTexture('player_turnleft')
-      //     break
-      //   case 'right':
-      //     this.setTexture('player_turnright')
-      //   default:
-      //     break
-      // }
+    }
+
+    // Skill: Plant a bomb
+    if (
+      keyboard.space.isDown &&
+      this.bomb.ready &&
+      (this.bomb.count > 0 || this.bomb.count === -1)
+    ) {
+      this.bomb.ready = false
+      console.log('Bomb has been planted')
+      setTimeout(() => (this.bomb.ready = true), this.bomb.cooldown)
     }
   }
 }

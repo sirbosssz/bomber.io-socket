@@ -47,8 +47,8 @@ export default class HomeScene extends Phaser.Scene {
   public create(): void {
     // Set World Map
     const world = {
-      x: 64 * 0,
-      y: 64 * 0,
+      x: 64 * 2,
+      y: 64 * 2,
       width: 64 * 10,
       height: 64 * 10,
     }
@@ -88,6 +88,7 @@ export default class HomeScene extends Phaser.Scene {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
+      space: Phaser.Input.Keyboard.KeyCodes.SPACE,
     })
   }
 

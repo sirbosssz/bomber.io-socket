@@ -5,4 +5,5 @@ export default interface IPlayerCursor {
   down?: Phaser.Input.Keyboard.Key
   left?: Phaser.Input.Keyboard.Key
   right?: Phaser.Input.Keyboard.Key
+  space?: Phaser.Input.Keyboard.Key
 }
