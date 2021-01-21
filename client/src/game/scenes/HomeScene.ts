@@ -11,10 +11,11 @@ import player_walkleft2 from '../assets/character/player/left2.png'
 import player_walkright1 from '../assets/character/player/right1.png'
 import player_walkright2 from '../assets/character/player/right2.png'
 
+import ground from '../assets/ground/ground2.png'
+
 import button_test from '../assets/UI/button/test.png'
 
 import Player from '../sprites/Player'
-import IPlayerCursor from '../types/IPlayerCursor'
 
 export default class HomeScene extends Phaser.Scene {
   private player: Player
@@ -41,6 +42,8 @@ export default class HomeScene extends Phaser.Scene {
     this.load.image('player_walkright1', player_walkright1)
     this.load.image('player_walkright2', player_walkright2)
 
+    this.load.image('ground', ground)
+
     this.load.image('button_test', button_test)
   }
 
@@ -52,10 +55,9 @@ export default class HomeScene extends Phaser.Scene {
       width: 64 * 10,
       height: 64 * 10,
     }
-    const worldMap = this.add.graphics()
-    worldMap
-      .fillStyle(0x65cbcf, 0.5)
-      .fillRect(world.x, world.y, world.width, world.height)
+
+    const worldmap = this.add.tileSprite(world.x, world.y, world.width, world.height, 'ground')
+    worldmap.setOrigin(0)
 
     this.physics.world.setBounds(world.x, world.y, world.width, world.height)
 
