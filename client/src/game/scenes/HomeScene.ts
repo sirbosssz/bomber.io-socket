@@ -1,5 +1,5 @@
-import player_idle from '../assets/character/player/idle.png'
-import player_turnback from '../assets/character/player/turn_back.png'
+import player_turndown from '../assets/character/player/idle.png'
+import player_turnup from '../assets/character/player/turn_back.png'
 import player_turnleft from '../assets/character/player/turn_left.png'
 import player_turnright from '../assets/character/player/turn_right.png'
 import player_walkdown1 from '../assets/character/player/down1.png'
@@ -28,8 +28,8 @@ export default class HomeScene extends Phaser.Scene {
 
   public preload(): void {
     // player assets
-    this.load.image('player_idle', player_idle)
-    this.load.image('player_turnback', player_turnback)
+    this.load.image('player_turndown', player_turndown)
+    this.load.image('player_turnup', player_turnup)
     this.load.image('player_turnleft', player_turnleft)
     this.load.image('player_turnright', player_turnright)
     this.load.image('player_walkdown1', player_walkdown1)
@@ -101,6 +101,6 @@ export default class HomeScene extends Phaser.Scene {
   }
 
   public update(time: number, delta: number): void {
-    this.player.moveControl(this.playerCursor)
+    this.player.playerController(this.playerCursor)
   }
 }
