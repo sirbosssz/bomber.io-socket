@@ -11,7 +11,9 @@ import player_walkleft2 from '../assets/character/player/left2.png'
 import player_walkright1 from '../assets/character/player/right1.png'
 import player_walkright2 from '../assets/character/player/right2.png'
 
-import ground from '../assets/ground/ground2.png'
+import ground1 from '../assets/ground/ground1.png'
+import ground2 from '../assets/ground/ground2.png'
+import ground3 from '../assets/ground/ground3.png'
 
 import button_test from '../assets/UI/button/test.png'
 
@@ -42,22 +44,66 @@ export default class HomeScene extends Phaser.Scene {
     this.load.image('player_walkright1', player_walkright1)
     this.load.image('player_walkright2', player_walkright2)
 
-    this.load.image('ground', ground)
+    // map
+    this.load.image('ground1', ground1)
+    this.load.image('ground2', ground2)
+    this.load.image('ground3', ground3)
 
     this.load.image('button_test', button_test)
   }
 
   public create(): void {
     // Set World Map
+    const map = [
+      [2, 2, 3, 3, 3, 3, 3, 3, 3, 3],
+      [1, 2, 1, 1, 1, 1, 1, 1, 3, 3],
+      [3, 2, 3, 1, 1, 1, 1, 3, 3, 3],
+      [3, 2, 1, 1, 1, 1, 3, 2, 2, 2],
+      [1, 2, 2, 1, 1, 3, 3, 2, 1, 1],
+      [1, 1, 2, 2, 1, 3, 3, 2, 1, 1],
+      [1, 1, 3, 2, 2, 3, 2, 1, 1, 1],
+      [1, 1, 3, 1, 2, 2, 1, 1, 1, 1],
+      [1, 1, 3, 1, 1, 2, 2, 3, 3, 3],
+      [1, 1, 1, 1, 1, 3, 2, 2, 3, 3],
+    ]
+    const tiled = {
+      x: 1,
+      y: 1,
+      width: map[0].length,
+      height: map.length,
+    }
     const world = {
-      x: 64 * 1,
-      y: 64 * 1,
-      width: 64 * 10,
-      height: 64 * 10,
+      x: 64 * tiled.x,
+      y: 64 * tiled.y,
+      width: 64 * tiled.width,
+      height: 64 * tiled.height,
     }
 
-    const worldmap = this.add.tileSprite(world.x, world.y, world.width, world.height, 'ground')
-    worldmap.setOrigin(0)
+    map.forEach((mapRow, row) => {
+      mapRow.forEach((mapCol, col) => {
+        this.add
+          .image((tiled.x + col) * 64, (tiled.y + row) * 64, `ground${mapCol}`)
+          .setOrigin(0)
+          .setDisplaySize(64, 64)
+      })
+    })
+
+    // const worldmap = this.add.tileSprite(
+    //   world.x,
+    //   world.y,
+    //   world.width,
+    //   world.height,
+    //   'ground1'
+    // )
+    // worldmap.setOrigin(0)
+
+    // Array.apply(null, Array(tiled.width)).map(Number.call, Number).forEach((widthIndex: number) => {
+    //   if (widthIndex % 2 == 0) {
+    //     this.add.image((tiled.x + widthIndex) * 64 , tiled.y * 64, 'ground2').setOrigin(0).setDisplaySize(64, 64)
+    //   } else {
+    //     this.add.image((tiled.x + widthIndex) * 64 , tiled.y * 64, 'ground3').setOrigin(0).setDisplaySize(64, 64)
+    //   }
+    // })
 
     this.physics.world.setBounds(world.x, world.y, world.width, world.height)
 
