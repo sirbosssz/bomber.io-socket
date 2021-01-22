@@ -9,15 +9,25 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     x: number,
     y: number,
     width: number = 128,
-    height: number = 128
+    height: number = 128,
+    playerText: string = 'player'
   ) {
     super(scene, x, y, 'player_turndown')
 
     scene.add.existing(this)
     scene.physics.add.existing(this)
 
-    this.setDisplaySize(width, height).setSize(90, 100)
+    // add player text
 
+    this.playerText = scene.add
+      .text(x, y - height / 2, playerText, {
+        color: 'black',
+        fontSize: '16pt',
+        fontStyle: 'bold',
+      })
+      .setOrigin(0.5)
+
+    this.setDisplaySize(width, height).setSize(90, 100)
     // this.setDisplaySize((128 / 90) * width, (128 / 100) * height)
     //   .setSize(90, 100)
 
@@ -76,6 +86,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     cooldown: 1000,
     ready: true,
   }
+  private playerText: Phaser.GameObjects.Text
 
   skillControl(
     key: Phaser.Input.Keyboard.Key,
@@ -125,6 +136,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
   playerController(keyboard: IPlayerCursor): void {
     this.setVelocity(0)
+
+    // set playertext
+    this.playerText
+      .setPosition(
+        this.body.position.x + this.body.width / 2,
+        this.body.position.y - this.playerText.height/ 2
+      )
+      .setOrigin(0.5)
 
     // 4 Direction movement
     this.moveControl('up', keyboard.up, keyboard.alt_up)

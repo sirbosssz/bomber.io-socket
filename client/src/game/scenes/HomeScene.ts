@@ -113,7 +113,8 @@ export default class HomeScene extends Phaser.Scene {
       world.x + 32,
       world.y + 32,
       64,
-      64
+      64,
+      'Bob'
     ).setCollideWorldBounds(true)
 
     // FullScreen
