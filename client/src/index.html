@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>WebGL Bombermannn</title>
 
     <style>
@@ -15,6 +18,24 @@
         background-color: #2a2a2a;
         overflow: hidden;
       }
+      body {
+        position: relative;
+      }
+      #safe-area {
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: -1;
+      }
+      .safe-area {
+        margin: env(safe-area-inset-top) env(safe-area-inset-right)
+          env(safe-area-inset-bottom) env(safe-area-inset-left);
+        position: absolute;
+        width: calc(
+          100% - (env(safe-area-inset-right) + env(safe-area-inset-left))
+        );
+        height: calc(
+          100% - (env(safe-area-inset-top) + env(safe-area-inset-bottom))
+        );
+      }
     </style>
 
     <noscript>
@@ -22,6 +43,7 @@
     </noscript>
   </head>
   <body>
+    <div id="safe-area" class="safe-area">This is Safe Area (It's hidden below canvas)</div>
     <div id="app"></div>
     <script src="game/index.ts"></script>
   </body>
