@@ -22,10 +22,12 @@ import Player from '../sprites/Player'
 
 import getSafeArea from '../../data/safeArea'
 import getClientArea from '../../data/clientArea'
+import ICoordinate from '../types/ICoordinate'
 
 export default class HomeScene extends Phaser.Scene {
   private player: Player
   private playerCursor
+  private world: ICoordinate
 
   constructor() {
     super({ key: 'HomeScene' })
@@ -78,7 +80,7 @@ export default class HomeScene extends Phaser.Scene {
       width: map[0].length,
       height: map.length,
     }
-    const world = {
+    this.world = {
       x: 64 * tiled.x,
       y: 64 * tiled.y,
       width: 64 * tiled.width,
@@ -111,49 +113,68 @@ export default class HomeScene extends Phaser.Scene {
     //   }
     // })
 
-    this.physics.world.setBounds(world.x, world.y, world.width, world.height)
+    this.physics.world.setBounds(
+      this.world.x,
+      this.world.y,
+      this.world.width,
+      this.world.height
+    )
 
     // Camera
-    let safeArea = getSafeArea()
-    let clientArea = getClientArea()
-    this.cameras.main.setBounds(
-      world.width - clientArea.width > 0
-        ? (world.width - clientArea.width) / 2 - safeArea.x
-        : (world.width - clientArea.width) / 2,
-      world.height - clientArea.height > 0
-        ? (world.height - clientArea.height) / 2 - safeArea.y
-        : (world.height - clientArea.height) / 2,
-      world.width,
-      world.height
-    )
     // this.cameras.main.setBounds(0, 0, 1920 * 2, 1080 * 2);
-
+    const safeArea = getSafeArea()
+    const clientArea = getClientArea()
+    const cameraArea = {
+      x:
+        (this.world.width - clientArea.width) / 2 < 0
+          ? safeArea.x + (this.world.width - clientArea.width) / 2
+          : safeArea.x,
+      y:
+        (this.world.height - clientArea.height) / 2 < 0
+          ? safeArea.y + (this.world.height - clientArea.height) / 2
+          : safeArea.y,
+    }
+    this.cameras.main.setBounds(
+      cameraArea.x,
+      cameraArea.y,
+      this.world.width,
+      this.world.height
+    )
     window.addEventListener('resize', () => {
-      safeArea = getSafeArea()
-      clientArea = getClientArea()
+      const safeArea = getSafeArea()
+      const clientArea = getClientArea()
+      const cameraArea = {
+        x:
+          (this.world.width - clientArea.width) / 2 < 0
+            ? safeArea.x + (this.world.width - clientArea.width) / 2
+            : safeArea.x,
+        y:
+          (this.world.height - clientArea.height) / 2 < 0
+            ? safeArea.y + (this.world.height - clientArea.height) / 2
+            : safeArea.y,
+      }
       this.cameras.main.setBounds(
-        safeArea.x + (world.width - clientArea.width) / 2,
-        safeArea.y + (world.height - clientArea.height) / 2,
-        world.width,
-        world.height
+        cameraArea.x,
+        cameraArea.y,
+        this.world.width,
+        this.world.height
       )
     })
 
     // Player
     const playerBlockPos = {
-      x: 5,
+      x: 0,
       y: 0,
     }
     this.player = new Player(
       this,
-      world.x + 32 + 64 * playerBlockPos.x,
-      world.y + 32 + 64 * playerBlockPos.y,
+      this.world.x + 32 + 64 * playerBlockPos.x,
+      this.world.y + 32 + 64 * playerBlockPos.y,
       64,
       64,
       'Bob'
     ).setCollideWorldBounds(true)
 
-    this.cameras.main.centerOn(352, 672)
     this.cameras.main.startFollow(this.player)
 
     // FullScreen
@@ -189,6 +210,6 @@ export default class HomeScene extends Phaser.Scene {
   }
 
   public update(time: number, delta: number): void {
-    this.player.playerController(this.playerCursor)
+    this.player.playerController(this.playerCursor, delta)
   }
 }

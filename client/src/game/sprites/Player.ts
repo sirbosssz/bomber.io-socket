@@ -1,18 +1,15 @@
-// import texture from '../assets/character/*.png'
-
-import ICoordinate from '../types/ICoordinate'
 import IPlayerCursor from '../types/IPlayerCursor'
 import IPlayerSkill from '../types/IPlayerSkill'
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
-  private speed: number = 600
+  private speed: number = 8000
   private status: string = 'turndown'
   private skillBomb: IPlayerSkill = {
     cooldown: 1000,
     ready: true,
   }
   private playerText: Phaser.GameObjects.Text
-  private skillArea: Phaser.GameObjects.Image
+  private skillArea: Phaser.Physics.Arcade.Image
 
   constructor(
     scene: Phaser.Scene,
@@ -41,9 +38,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       .setOrigin(0.5)
 
     // add place bomb area
-    this.skillArea = scene.add
+    this.skillArea = scene.physics.add
       .image(x, y + 64, 'bomb_area')
       .setDisplaySize(64, 64)
+      .setCollideWorldBounds(true)
 
     // animation
     const walkFramerate = 12
@@ -116,6 +114,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   private moveControl(
+    delta: number,
     direction: string,
     key: Phaser.Input.Keyboard.Key,
     alt_key?: Phaser.Input.Keyboard.Key
@@ -123,16 +122,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (key.isDown || (alt_key !== undefined && alt_key.isDown)) {
       switch (direction) {
         case 'left':
-          if (this.status == `turnleft`) this.setVelocityX(-this.speed)
+          this.setVelocity(-this.speed / delta, 0)
           break
         case 'right':
-          if (this.status == `turnright`) this.setVelocityX(this.speed)
+          this.setVelocity(this.speed / delta, 0)
           break
         case 'up':
-          if (this.status == `turnup`) this.setVelocityY(-this.speed)
+          this.setVelocity(0, -this.speed / delta)
           break
         case 'down':
-          if (this.status == `turndown`) this.setVelocityY(this.speed)
+          this.setVelocity(0, this.speed / delta)
           break
       }
       this.anims.play(`walk${direction}`, true)
@@ -140,7 +139,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  playerController(keyboard: IPlayerCursor): void {
+  playerController(keyboard: IPlayerCursor, delta: number): void {
     this.setVelocity(0)
 
     // set playertext
@@ -153,10 +152,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     // set skillarea
     const radious: number = 2
-    const skillTarget: ICoordinate = {
-      x: this.body.position.x + this.body.width / 2,
-      y: this.body.position.y + this.body.height / 2,
-    }
+    const skillTarget = new Phaser.Math.Vector2(
+      this.body.position.x + this.body.width / 2,
+      this.body.position.y + this.body.height / 2
+    )
     switch (this.status) {
       case 'turndown':
         skillTarget.y += 64 * radious
@@ -171,13 +170,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         skillTarget.x += 64 * radious
         break
     }
-    this.skillArea.setPosition(skillTarget.x, skillTarget.y)
+    const moveTime = 50
+    setTimeout(() => {
+      this.scene.physics.moveToObject(this.skillArea, skillTarget, this.speed / delta, moveTime)
+    }, moveTime/ 2)
 
     // 4 Direction movement
-    this.moveControl('up', keyboard.up, keyboard.alt_up)
-    this.moveControl('down', keyboard.down, keyboard.alt_down)
-    this.moveControl('left', keyboard.left, keyboard.alt_left)
-    this.moveControl('right', keyboard.right, keyboard.alt_right)
+    this.moveControl(delta, 'up', keyboard.up, keyboard.alt_up)
+    this.moveControl(delta, 'down', keyboard.down, keyboard.alt_down)
+    this.moveControl(delta, 'left', keyboard.left, keyboard.alt_left)
+    this.moveControl(delta, 'right', keyboard.right, keyboard.alt_right)
 
     let moving =
       !keyboard.left.isDown &&
