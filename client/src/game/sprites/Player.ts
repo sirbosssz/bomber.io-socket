@@ -172,8 +172,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
     const moveTime = 50
     setTimeout(() => {
-      this.scene.physics.moveToObject(this.skillArea, skillTarget, this.speed / delta, moveTime)
-    }, moveTime/ 2)
+      this.scene.physics.moveToObject(
+        this.skillArea,
+        skillTarget,
+        this.speed / delta,
+        moveTime
+      )
+    }, moveTime / 2)
 
     // 4 Direction movement
     this.moveControl(delta, 'up', keyboard.up, keyboard.alt_up)

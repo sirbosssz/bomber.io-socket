@@ -122,42 +122,20 @@ export default class HomeScene extends Phaser.Scene {
 
     // Camera
     // this.cameras.main.setBounds(0, 0, 1920 * 2, 1080 * 2);
-    const safeArea = getSafeArea()
-    const clientArea = getClientArea()
-    const cameraArea = {
-      x:
-        (this.world.width - clientArea.width) / 2 < 0
-          ? safeArea.x + (this.world.width - clientArea.width) / 2
-          : safeArea.x,
-      y:
-        (this.world.height - clientArea.height) / 2 < 0
-          ? safeArea.y + (this.world.height - clientArea.height) / 2
-          : safeArea.y,
-    }
+    const cameraArea = this.updateCameraArea()
     this.cameras.main.setBounds(
       cameraArea.x,
       cameraArea.y,
-      this.world.width,
-      this.world.height
+      this.world.width + 64,
+      this.world.height + 64
     )
     window.addEventListener('resize', () => {
-      const safeArea = getSafeArea()
-      const clientArea = getClientArea()
-      const cameraArea = {
-        x:
-          (this.world.width - clientArea.width) / 2 < 0
-            ? safeArea.x + (this.world.width - clientArea.width) / 2
-            : safeArea.x,
-        y:
-          (this.world.height - clientArea.height) / 2 < 0
-            ? safeArea.y + (this.world.height - clientArea.height) / 2
-            : safeArea.y,
-      }
+      const cameraArea = this.updateCameraArea()
       this.cameras.main.setBounds(
         cameraArea.x,
         cameraArea.y,
-        this.world.width,
-        this.world.height
+        this.world.width + 64,
+        this.world.height + 64
       )
     })
 
@@ -211,5 +189,18 @@ export default class HomeScene extends Phaser.Scene {
 
   public update(time: number, delta: number): void {
     this.player.playerController(this.playerCursor, delta)
+  }
+
+  private updateCameraArea(): Phaser.Math.Vector2 {
+    const safeArea = getSafeArea()
+    const clientArea = getClientArea()
+    return new Phaser.Math.Vector2(
+      (this.world.width - clientArea.width) / 2 < 0
+        ? safeArea.x + (this.world.width - clientArea.width) / 2
+        : safeArea.x - 32,
+      (this.world.height - clientArea.height) / 2 < 0
+        ? safeArea.y + (this.world.height - clientArea.height) / 2
+        : safeArea.y - 32
+    )
   }
 }
