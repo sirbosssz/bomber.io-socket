@@ -1,9 +1,19 @@
 // import texture from '../assets/character/*.png'
 
+import ICoordinate from '../types/ICoordinate'
 import IPlayerCursor from '../types/IPlayerCursor'
 import IPlayerSkill from '../types/IPlayerSkill'
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
+  private speed: number = 600
+  private status: string = 'turndown'
+  private skillBomb: IPlayerSkill = {
+    cooldown: 1000,
+    ready: true,
+  }
+  private playerText: Phaser.GameObjects.Text
+  private skillArea: Phaser.GameObjects.Image
+
   constructor(
     scene: Phaser.Scene,
     x: number,
@@ -17,8 +27,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this)
     scene.physics.add.existing(this)
 
-    // add player text
+    this.setDisplaySize(width, height).setSize(90, 100)
+    // this.setDisplaySize((128 / 90) * width, (128 / 100) * height)
+    //   .setSize(90, 100)
 
+    // add player text
     this.playerText = scene.add
       .text(x, y - height / 2, playerText, {
         color: 'black',
@@ -27,9 +40,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       })
       .setOrigin(0.5)
 
-    this.setDisplaySize(width, height).setSize(90, 100)
-    // this.setDisplaySize((128 / 90) * width, (128 / 100) * height)
-    //   .setSize(90, 100)
+    // add place bomb area
+    this.skillArea = scene.add
+      .image(x, y + 64, 'bomb_area')
+      .setDisplaySize(64, 64)
 
     // animation
     const walkFramerate = 12
@@ -80,15 +94,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     })
   }
 
-  private speed: number = 500
-  private status: string = 'turndown'
-  private bomb: IPlayerSkill = {
-    cooldown: 1000,
-    ready: true,
-  }
-  private playerText: Phaser.GameObjects.Text
-
-  skillControl(
+  private skillControl(
     key: Phaser.Input.Keyboard.Key,
     skill: IPlayerSkill,
     skillAction: Function,
@@ -109,7 +115,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  moveControl(
+  private moveControl(
     direction: string,
     key: Phaser.Input.Keyboard.Key,
     alt_key?: Phaser.Input.Keyboard.Key
@@ -117,16 +123,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (key.isDown || (alt_key !== undefined && alt_key.isDown)) {
       switch (direction) {
         case 'left':
-          this.setVelocityX(-this.speed)
+          if (this.status == `turnleft`) this.setVelocityX(-this.speed)
           break
         case 'right':
-          this.setVelocityX(this.speed)
+          if (this.status == `turnright`) this.setVelocityX(this.speed)
           break
         case 'up':
-          this.setVelocityY(-this.speed)
+          if (this.status == `turnup`) this.setVelocityY(-this.speed)
           break
         case 'down':
-          this.setVelocityY(this.speed)
+          if (this.status == `turndown`) this.setVelocityY(this.speed)
           break
       }
       this.anims.play(`walk${direction}`, true)
@@ -141,9 +147,31 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.playerText
       .setPosition(
         this.body.position.x + this.body.width / 2,
-        this.body.position.y - this.playerText.height/ 2
+        this.body.position.y - this.playerText.height / 2
       )
       .setOrigin(0.5)
+
+    // set skillarea
+    const radious: number = 2
+    const skillTarget: ICoordinate = {
+      x: this.body.position.x + this.body.width / 2,
+      y: this.body.position.y + this.body.height / 2,
+    }
+    switch (this.status) {
+      case 'turndown':
+        skillTarget.y += 64 * radious
+        break
+      case 'turnup':
+        skillTarget.y -= 64 * radious
+        break
+      case 'turnleft':
+        skillTarget.x -= 64 * radious
+        break
+      case 'turnright':
+        skillTarget.x += 64 * radious
+        break
+    }
+    this.skillArea.setPosition(skillTarget.x, skillTarget.y)
 
     // 4 Direction movement
     this.moveControl('up', keyboard.up, keyboard.alt_up)
@@ -178,9 +206,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     // Skill: Plant a bomb
     this.skillControl(
       keyboard.space,
-      this.bomb,
+      this.skillBomb,
       () => {
-        console.log('bomb has been planted,', 'left:', this.bomb.count)
+        console.log('bomb has been planted,', 'left:', this.skillBomb.count)
       },
       () => {
         console.log('can plant again!')

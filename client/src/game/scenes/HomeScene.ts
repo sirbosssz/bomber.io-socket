@@ -10,6 +10,7 @@ import player_walkleft1 from '../assets/character/player/left1.png'
 import player_walkleft2 from '../assets/character/player/left2.png'
 import player_walkright1 from '../assets/character/player/right1.png'
 import player_walkright2 from '../assets/character/player/right2.png'
+import bomb_area from '../assets/character/player/bomb_area.png'
 
 import ground1 from '../assets/ground/ground1.png'
 import ground2 from '../assets/ground/ground2.png'
@@ -46,6 +47,8 @@ export default class HomeScene extends Phaser.Scene {
     this.load.image('player_walkleft2', player_walkleft2)
     this.load.image('player_walkright1', player_walkright1)
     this.load.image('player_walkright2', player_walkright2)
+
+    this.load.image('bomb_area', bomb_area)
 
     // map
     this.load.image('ground1', ground1)
@@ -139,7 +142,7 @@ export default class HomeScene extends Phaser.Scene {
     // Player
     const playerBlockPos = {
       x: 5,
-      y: 15,
+      y: 0,
     }
     this.player = new Player(
       this,
