@@ -1,13 +1,6 @@
 import 'phaser'
 import HomeScene from './scenes/HomeScene'
 
-// get UI SafeArea
-const safeAreaUI = document.querySelector('#safe-area')
-const safeArea = {
-  width: safeAreaUI.clientWidth,
-  height: safeAreaUI.clientHeight,
-}
-
 const [DEFAULT_WIDTH, DEFAULT_HEIGHT, MAX_WIDTH, MAX_HEIGHT] = [
   1024,
   576,

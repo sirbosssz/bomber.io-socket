@@ -19,6 +19,9 @@ import button_test from '../assets/UI/button/test.png'
 
 import Player from '../sprites/Player'
 
+import getSafeArea from '../../data/safeArea'
+import getClientArea from '../../data/clientArea'
+
 export default class HomeScene extends Phaser.Scene {
   private player: Player
   private playerCursor
@@ -67,8 +70,8 @@ export default class HomeScene extends Phaser.Scene {
       [1, 1, 1, 1, 1, 3, 2, 2, 3, 3],
     ]
     const tiled = {
-      x: 1,
-      y: 1,
+      x: 0,
+      y: 0,
       width: map[0].length,
       height: map.length,
     }
@@ -107,15 +110,48 @@ export default class HomeScene extends Phaser.Scene {
 
     this.physics.world.setBounds(world.x, world.y, world.width, world.height)
 
+    // Camera
+    let safeArea = getSafeArea()
+    let clientArea = getClientArea()
+    this.cameras.main.setBounds(
+      world.width - clientArea.width > 0
+        ? (world.width - clientArea.width) / 2 - safeArea.x
+        : (world.width - clientArea.width) / 2,
+      world.height - clientArea.height > 0
+        ? (world.height - clientArea.height) / 2 - safeArea.y
+        : (world.height - clientArea.height) / 2,
+      world.width,
+      world.height
+    )
+    // this.cameras.main.setBounds(0, 0, 1920 * 2, 1080 * 2);
+
+    window.addEventListener('resize', () => {
+      safeArea = getSafeArea()
+      clientArea = getClientArea()
+      this.cameras.main.setBounds(
+        safeArea.x + (world.width - clientArea.width) / 2,
+        safeArea.y + (world.height - clientArea.height) / 2,
+        world.width,
+        world.height
+      )
+    })
+
     // Player
+    const playerBlockPos = {
+      x: 5,
+      y: 15,
+    }
     this.player = new Player(
       this,
-      world.x + 32,
-      world.y + 32,
+      world.x + 32 + 64 * playerBlockPos.x,
+      world.y + 32 + 64 * playerBlockPos.y,
       64,
       64,
       'Bob'
     ).setCollideWorldBounds(true)
+
+    this.cameras.main.centerOn(352, 672)
+    this.cameras.main.startFollow(this.player)
 
     // FullScreen
     // const fullscreenBtn = this.add
