@@ -139,6 +139,7 @@ export default class HomeScene extends Phaser.Scene {
     )
     window.addEventListener('resize', () => {
       const cameraArea = this.updateCameraArea()
+
       this.cameras.main.setBounds(
         cameraArea.x,
         cameraArea.y,
@@ -202,12 +203,13 @@ export default class HomeScene extends Phaser.Scene {
   private updateCameraArea(): Phaser.Math.Vector2 {
     const safeArea = getSafeArea()
     const clientArea = getClientArea()
+
     return new Phaser.Math.Vector2(
-      (this.world.width - clientArea.width) / 2 < 0
-        ? safeArea.x + (this.world.width - clientArea.width) / 2
+      (this.world.width - clientArea.width) / 2 < safeArea.x
+        ? (this.world.width - clientArea.width) / 2
         : safeArea.x - 32,
-      (this.world.height - clientArea.height) / 2 < 0
-        ? safeArea.y + (this.world.height - clientArea.height) / 2
+      (this.world.height - clientArea.height) / 2 < safeArea.y
+        ? (this.world.height - clientArea.height) / 2
         : safeArea.y - 32
     )
   }
