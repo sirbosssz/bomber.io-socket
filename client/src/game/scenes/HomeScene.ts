@@ -1,3 +1,5 @@
+// image assets
+// player
 import player_turndown from '../assets/character/player/idle.png'
 import player_turnup from '../assets/character/player/turn_back.png'
 import player_turnleft from '../assets/character/player/turn_left.png'
@@ -10,16 +12,21 @@ import player_walkleft1 from '../assets/character/player/left1.png'
 import player_walkleft2 from '../assets/character/player/left2.png'
 import player_walkright1 from '../assets/character/player/right1.png'
 import player_walkright2 from '../assets/character/player/right2.png'
-import bomb_area from '../assets/character/player/bomb_area.png'
+import bomb_area from '../assets/character/skill/bomb_area.png'
+import bomb from '../assets/character/skill/bomb.png'
 
+// map
 import ground1 from '../assets/ground/ground1.png'
 import ground2 from '../assets/ground/ground2.png'
 import ground3 from '../assets/ground/ground3.png'
 
+// ui
 import button_test from '../assets/UI/button/test.png'
 
+// classes
 import Player from '../sprites/Player'
 
+// scripts
 import getSafeArea from '../../data/safeArea'
 import getClientArea from '../../data/clientArea'
 import ICoordinate from '../types/ICoordinate'
@@ -51,6 +58,7 @@ export default class HomeScene extends Phaser.Scene {
     this.load.image('player_walkright2', player_walkright2)
 
     this.load.image('bomb_area', bomb_area)
+    this.load.image('bomb', bomb)
 
     // map
     this.load.image('ground1', ground1)

@@ -1,8 +1,9 @@
 import IPlayerCursor from '../types/IPlayerCursor'
 import IPlayerSkill from '../types/IPlayerSkill'
 
+import Bomb from './Bomb'
 export default class Player extends Phaser.Physics.Arcade.Sprite {
-  private speed: number = 8000
+  private speed: number = 5000
   private status: string = 'turndown'
   private skillBomb: IPlayerSkill = {
     cooldown: 1000,
@@ -10,6 +11,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
   private playerText: Phaser.GameObjects.Text
   private skillArea: Phaser.Physics.Arcade.Image
+
+  private bomb: Bomb = undefined
+  private bombTarget: Phaser.Math.Vector2 = undefined
 
   constructor(
     scene: Phaser.Scene,
@@ -170,7 +174,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         skillTarget.x += 64 * radious
         break
     }
-    const moveTime = 50
+    const moveTime = 30
     setTimeout(() => {
       this.scene.physics.moveToObject(
         this.skillArea,
@@ -215,11 +219,25 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       keyboard.space,
       this.skillBomb,
       () => {
-        console.log('bomb has been planted,', 'left:', this.skillBomb.count)
+        // console.log('bomb has been planted,', 'left:', this.skillBomb.count)
+        this.bomb = new Bomb(
+          this.scene,
+          this.body.position.x + this.body.width / 2,
+          this.body.position.y + this.body.height / 2
+        )
+        this.bombTarget = skillTarget
       },
       () => {
         console.log('can plant again!')
       }
     )
+    // check Bomb is Desroyed
+    if (this.bomb !== undefined) {
+      if (this.bomb.isDestroyed()) {
+        this.bomb = this.bomb.isDestroyed() ? undefined : this.bomb
+      } else {
+        this.bomb.moveto(this.bombTarget, delta)
+      }
+    }
   }
 }
