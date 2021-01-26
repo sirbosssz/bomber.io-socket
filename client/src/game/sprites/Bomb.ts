@@ -1,5 +1,4 @@
 export default class Bomb extends Phaser.Physics.Arcade.Sprite {
-  private radious: number = 3
   private timer: number = 3000
   private moveSpeed: number = 5000
   private destroyed: boolean = false
@@ -23,7 +22,13 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
   }
 
   public moveto(destination: Phaser.Math.Vector2, delta: number): void {
-    if (this) this.scene.physics.moveToObject(this, destination, this.moveSpeed / delta, 100)
+    if (this)
+      this.scene.physics.moveToObject(
+        this,
+        destination,
+        this.moveSpeed / delta,
+        100
+      )
 
     const distance = Phaser.Math.Distance.Between(
       this.x,
