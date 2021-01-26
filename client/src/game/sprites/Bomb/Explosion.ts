@@ -1,4 +1,4 @@
-export default class Explosion extends Phaser.Physics.Arcade.Sprite {
+export default class Explosion extends Phaser.GameObjects.Sprite {
   private radius: number = 3
   private maxdamage: number = 3
   private area: Phaser.GameObjects.Arc
@@ -9,7 +9,7 @@ export default class Explosion extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, 'explosion1')
 
     scene.add.existing(this)
-    scene.physics.add.existing(this)
+    // scene.physics.add.existing(this)
 
     this.setDisplaySize(this.radius * 64, this.radius * 64).setDepth(11)
 
@@ -24,7 +24,7 @@ export default class Explosion extends Phaser.Physics.Arcade.Sprite {
         { key: 'explosion4' },
       ],
       frameRate: this.frameRate,
-      repeat: 1,
+      repeat: -1,
     })
   }
 
