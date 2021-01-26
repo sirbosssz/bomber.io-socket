@@ -225,11 +225,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           this.body.position.x + this.body.width / 2,
           this.body.position.y + this.body.height / 2
         ).setDepth(1)
-        // this.bombTarget = skillTarget
-        // this.bombTarget = new Phaser.Math.Vector2(
-        //   this.skillArea.body.position.x,
-        //   this.skillArea.body.position.y
-        // )
 
         this.bombTarget = new Phaser.Math.Vector2(
           this.skillArea.body.position.x + this.skillArea.displayWidth / 2,
@@ -237,7 +232,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         )
       },
       () => {
-        console.log('can plant again!')
+        // console.log('can plant again!')
       }
     )
     // check Bomb is Desroyed

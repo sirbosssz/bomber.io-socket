@@ -1,5 +1,7 @@
+import Explosion from './Bomb/Explosion'
+
 export default class Bomb extends Phaser.Physics.Arcade.Sprite {
-  private timer: number = 3000
+  private timer: number = 1000
   private moveSpeed: number = 5000
   private destroyed: boolean = false
 
@@ -13,6 +15,12 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
 
     setTimeout(() => {
       this.destroyed = true
+      const explosion = new Explosion(
+        scene,
+        this.body.position.x,
+        this.body.position.y
+      )
+      explosion.explode()
       this.destroy()
     }, this.timer)
   }

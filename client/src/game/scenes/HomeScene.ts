@@ -14,6 +14,10 @@ import player_walkright1 from '../assets/character/player/right1.png'
 import player_walkright2 from '../assets/character/player/right2.png'
 import bomb_area from '../assets/character/skill/bomb_area.png'
 import bomb from '../assets/character/skill/bomb.png'
+import explosion1 from '../assets/character/skill/explosion1.png'
+import explosion2 from '../assets/character/skill/explosion2.png'
+import explosion3 from '../assets/character/skill/explosion3.png'
+import explosion4 from '../assets/character/skill/explosion4.png'
 
 // map
 import ground1 from '../assets/ground/ground1.png'
@@ -40,6 +44,20 @@ export default class HomeScene extends Phaser.Scene {
     super({ key: 'HomeScene' })
   }
 
+  private updateCameraArea(): Phaser.Math.Vector2 {
+    const safeArea = getSafeArea()
+    const clientArea = getClientArea()
+
+    return new Phaser.Math.Vector2(
+      (this.world.width - clientArea.width) / 2 < safeArea.x
+        ? (this.world.width - clientArea.width) / 2
+        : safeArea.x - 32,
+      (this.world.height - clientArea.height) / 2 < safeArea.y
+        ? (this.world.height - clientArea.height) / 2
+        : safeArea.y - 32
+    )
+  }
+
   public init(): void {}
 
   public preload(): void {
@@ -59,6 +77,10 @@ export default class HomeScene extends Phaser.Scene {
 
     this.load.image('bomb_area', bomb_area)
     this.load.image('bomb', bomb)
+    this.load.image('explosion1', explosion1)
+    this.load.image('explosion2', explosion2)
+    this.load.image('explosion3', explosion3)
+    this.load.image('explosion4', explosion4)
 
     // map
     this.load.image('ground1', ground1)
@@ -160,7 +182,9 @@ export default class HomeScene extends Phaser.Scene {
       64,
       64,
       'Bob'
-    ).setCollideWorldBounds(true).setDepth(10)
+    )
+      .setCollideWorldBounds(true)
+      .setDepth(10)
 
     this.cameras.main.startFollow(this.player)
 
@@ -198,19 +222,5 @@ export default class HomeScene extends Phaser.Scene {
 
   public update(time: number, delta: number): void {
     this.player.playerController(this.playerCursor, delta)
-  }
-
-  private updateCameraArea(): Phaser.Math.Vector2 {
-    const safeArea = getSafeArea()
-    const clientArea = getClientArea()
-
-    return new Phaser.Math.Vector2(
-      (this.world.width - clientArea.width) / 2 < safeArea.x
-        ? (this.world.width - clientArea.width) / 2
-        : safeArea.x - 32,
-      (this.world.height - clientArea.height) / 2 < safeArea.y
-        ? (this.world.height - clientArea.height) / 2
-        : safeArea.y - 32
-    )
   }
 }
