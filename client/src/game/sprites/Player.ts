@@ -224,8 +224,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           this.scene,
           this.body.position.x + this.body.width / 2,
           this.body.position.y + this.body.height / 2
+        ).setDepth(1)
+        // this.bombTarget = skillTarget
+        // this.bombTarget = new Phaser.Math.Vector2(
+        //   this.skillArea.body.position.x,
+        //   this.skillArea.body.position.y
+        // )
+
+        this.bombTarget = new Phaser.Math.Vector2(
+          this.skillArea.body.position.x + this.skillArea.displayWidth / 2,
+          this.skillArea.body.position.y + this.skillArea.displayHeight / 2
         )
-        this.bombTarget = skillTarget
       },
       () => {
         console.log('can plant again!')

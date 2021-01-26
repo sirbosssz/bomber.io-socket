@@ -160,7 +160,7 @@ export default class HomeScene extends Phaser.Scene {
       64,
       64,
       'Bob'
-    ).setCollideWorldBounds(true)
+    ).setCollideWorldBounds(true).setDepth(10)
 
     this.cameras.main.startFollow(this.player)
 
