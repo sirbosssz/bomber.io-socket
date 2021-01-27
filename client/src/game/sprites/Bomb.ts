@@ -17,8 +17,8 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
       this.destroyed = true
       const explosion = new Explosion(
         scene,
-        this.body.position.x,
-        this.body.position.y
+        this.body.position.x + this.body.width / 2,
+        this.body.position.y + this.body.height / 2
       )
       explosion.explode()
       this.destroy()

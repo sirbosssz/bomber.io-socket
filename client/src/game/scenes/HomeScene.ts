@@ -37,6 +37,7 @@ import ICoordinate from '../types/ICoordinate'
 
 export default class HomeScene extends Phaser.Scene {
   private player: Player
+  private otherPlayers: Player[] = []
   private playerCursor
   private world: ICoordinate
 
@@ -56,6 +57,12 @@ export default class HomeScene extends Phaser.Scene {
         ? (this.world.height - clientArea.height) / 2
         : safeArea.y - 32
     )
+  }
+
+  public getCurrentPlayer(): Player[] {
+    let currentPlayer = [this.player]
+    currentPlayer = currentPlayer.concat(this.otherPlayers)
+    return currentPlayer
   }
 
   public init(): void {}
@@ -181,12 +188,22 @@ export default class HomeScene extends Phaser.Scene {
       this.world.y + 32 + 64 * playerBlockPos.y,
       64,
       64,
-      'Bob'
+      'Bob',
+      true
     )
       .setCollideWorldBounds(true)
       .setDepth(10)
 
     this.cameras.main.startFollow(this.player)
+
+    this.otherPlayers[0] = new Player(
+      this,
+      this.world.x + 32 + 64 * 5,
+      this.world.y + 32 + 64 * 2,
+      64,
+      64,
+      'Alice',
+    )
 
     // FullScreen
     // const fullscreenBtn = this.add
@@ -218,9 +235,14 @@ export default class HomeScene extends Phaser.Scene {
       // action control
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
     })
+
+    this.data.set('players', this.getCurrentPlayer())
   }
 
   public update(time: number, delta: number): void {
-    this.player.playerController(this.playerCursor, delta)
+    this.player.playerUpdate(delta, this.playerCursor)
+    this.otherPlayers.forEach(player => {
+      player.playerUpdate(delta)
+    })
   }
 }

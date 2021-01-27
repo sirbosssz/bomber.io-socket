@@ -5,6 +5,7 @@ import Bomb from './Bomb'
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   private speed: number = 5000
   private status: string = 'turndown'
+  private controlable: boolean = false
   private skillBomb: IPlayerSkill = {
     cooldown: 1000,
     ready: true,
@@ -15,26 +16,31 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   private bomb: Bomb = undefined
   private bombTarget: Phaser.Math.Vector2 = undefined
 
+  public name: string
+
   constructor(
     scene: Phaser.Scene,
     x: number,
     y: number,
     width: number = 128,
     height: number = 128,
-    playerText: string = 'player'
+    name: string = 'player',
+    controlable: boolean = false
   ) {
     super(scene, x, y, 'player_turndown')
 
     scene.add.existing(this)
     scene.physics.add.existing(this)
 
+    this.controlable = controlable
+    this.name = name
     this.setDisplaySize(width, height).setSize(90, 100)
     // this.setDisplaySize((128 / 90) * width, (128 / 100) * height)
     //   .setSize(90, 100)
 
     // add player text
     this.playerText = scene.add
-      .text(x, y - height / 2, playerText, {
+      .text(x, y - height / 2, this.name, {
         color: 'black',
         fontSize: '16pt',
         fontStyle: 'bold',
@@ -46,6 +52,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       .image(x, y + 64, 'bomb_area')
       .setDisplaySize(64, 64)
       .setCollideWorldBounds(true)
+    if (controlable === false) {
+      this.skillArea.setAlpha(0)
+    }
+
+    // player take damage
+    this.addListener('takedamage', this.takeDamage)
 
     // animation
     const walkFramerate = 12
@@ -142,8 +154,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.status = `turn${direction}`
     }
   }
-
-  playerController(keyboard: IPlayerCursor, delta: number): void {
+  playerUpdate(delta: number, keyboard?: IPlayerCursor): void {
     this.setVelocity(0)
 
     // set playertext
@@ -183,7 +194,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         moveTime
       )
     }, moveTime / 2)
+    if (this.controlable) {
+      this.playerController(keyboard, delta)
+    }
+  }
 
+  public takeDamage(point: number): void {
+    console.log(`${this.name} take damage: ${point}`);
+    
+  }
+
+  private playerController(keyboard: IPlayerCursor, delta: number): void {
     // 4 Direction movement
     this.moveControl(delta, 'up', keyboard.up, keyboard.alt_up)
     this.moveControl(delta, 'down', keyboard.down, keyboard.alt_down)
