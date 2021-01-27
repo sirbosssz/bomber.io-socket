@@ -22,33 +22,33 @@ export default class Explosion extends Phaser.GameObjects.Sprite {
       .setDisplaySize((this.radius + 1) * 64, (this.radius + 1) * 64)
       .setCircle(64)
       .setAlpha(0)
-    let canTouch = true
 
-    scene.physics.add.overlap(
-      scene.data.get('players'),
-      this.area,
-      (_player, _explosion) => {
-        if (canTouch) {
-          const distance = Phaser.Math.Distance.Between(
-            _player.body.x + _player.body.width / 2,
-            _player.body.y + _player.body.height / 2,
-            _explosion.body.x + _explosion.body.width / 2,
-            _explosion.body.y + _explosion.body.height / 2
-          )
-          let damage = this.maxdamage + 1
-          for (let i = 0; i < this.radius; i++) {
-            if (distance > (((this.radius - 1) * 64) / this.radius) * i) {
-              damage -= 1
-            } else {
-              break
-            }
+    const players: Phaser.GameObjects.GameObject[] = scene.data.get('players')
+    let canTouch: boolean[] = new Array(players.length).fill(true)
+
+    scene.physics.add.overlap(players, this.area, (_player, _explosion) => {
+      if (canTouch[players.indexOf(_player)]) {
+        const distance = Phaser.Math.Distance.Between(
+          _player.body.x + _player.body.width / 2,
+          _player.body.y + _player.body.height / 2,
+          _explosion.body.x + _explosion.body.width / 2,
+          _explosion.body.y + _explosion.body.height / 2
+        )
+        let damage = this.maxdamage + 1
+        for (let i = 0; i < this.radius; i++) {
+          if (distance > (((this.radius - 1) * 64) / this.radius) * i) {
+            damage -= 1
+          } else {
+            break
           }
-
-          _player.emit('takedamage', damage)
-          canTouch = false
         }
+
+        _player.emit('takedamage', damage)
+        canTouch[players.indexOf(_player)] = false
       }
-    )
+    })
+
+    // animation
 
     scene.anims.create({
       key: 'start_explosion',

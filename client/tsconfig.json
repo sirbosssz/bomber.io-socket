@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "sourceMap": true
+    "target": "esnext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "sourceMap": true,
   },
   "include": ["**/*.ts"],
   "typeRoots": ["./node_modules/phaser/types"],

@@ -26,7 +26,6 @@ import ground3 from '../assets/ground/ground3.png'
 
 // ui
 import button_test from '../assets/UI/button/test.png'
-
 // classes
 import Player from '../sprites/Player'
 
@@ -34,6 +33,7 @@ import Player from '../sprites/Player'
 import getSafeArea from '../../data/safeArea'
 import getClientArea from '../../data/clientArea'
 import ICoordinate from '../types/ICoordinate'
+import * as Phaser from 'phaser'
 
 export default class HomeScene extends Phaser.Scene {
   private player: Player
