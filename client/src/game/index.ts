@@ -21,11 +21,12 @@ const config: Phaser.Types.Core.GameConfig = {
     default: 'arcade',
     arcade: {
       gravity: { y: 0 },
-      debug: true,
+      debug: false,
     },
   },
 }
 
+let gameInstance
 window.addEventListener('load', () => {
-  const game = new Phaser.Game(config)
+  gameInstance = new Phaser.Game(config)
 })
