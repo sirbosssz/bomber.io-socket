@@ -5,3 +5,10 @@
 
 */.DS_Store
 .DS_Store
+
+*/.yarn/*
+*/!.yarn/cache
+*/!.yarn/releases
+*/!.yarn/plugins
+*/!.yarn/sdks
+*/!.yarn/versions
