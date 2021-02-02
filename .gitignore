@@ -3,9 +3,13 @@
 */.parcel-cache
 */dist
 
+# macos
 */.DS_Store
 .DS_Store
 
+# yarn
+*/.yarnrc
+*/.yarnrc.yml
 */.yarn/*
 */!.yarn/cache
 */!.yarn/releases
