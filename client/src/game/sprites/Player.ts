@@ -34,7 +34,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.controlable = controlable
     this.name = name
-    this.setDisplaySize(width, height).setSize(90, 100)
+    this.setDisplaySize(width, height).setSize(70, 90)
     // this.setDisplaySize((128 / 90) * width, (128 / 100) * height)
     //   .setSize(90, 100)
 
@@ -139,15 +139,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       switch (direction) {
         case 'left':
           this.setVelocity(-this.speed / delta, 0)
+          // this.setVelocityX(-this.speed / delta)
           break
         case 'right':
           this.setVelocity(this.speed / delta, 0)
+          // this.setVelocityX(this.speed / delta)
           break
         case 'up':
           this.setVelocity(0, -this.speed / delta)
+          // this.setVelocityY(-this.speed / delta)
           break
         case 'down':
           this.setVelocity(0, this.speed / delta)
+          // this.setVelocityY(this.speed / delta)
           break
       }
       this.anims.play(`walk${direction}`, true)
