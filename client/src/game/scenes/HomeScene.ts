@@ -19,13 +19,16 @@ import explosion2 from '../assets/character/skill/explosion2.png'
 import explosion3 from '../assets/character/skill/explosion3.png'
 import explosion4 from '../assets/character/skill/explosion4.png'
 
-// map
+// map items
 import ground1 from '../assets/ground/ground1.png'
 import ground2 from '../assets/ground/ground2.png'
 import ground3 from '../assets/ground/ground3.png'
 
 // ui
-import button_test from '../assets/UI/button/test.png'
+
+// saved maps
+import savedMap1 from '../maps/01.json'
+
 // classes
 import Player from '../sprites/Player'
 
@@ -33,6 +36,7 @@ import Player from '../sprites/Player'
 import getSafeArea from '../../data/safeArea'
 import getClientArea from '../../data/clientArea'
 import ICoordinate from '../types/ICoordinate'
+
 import * as Phaser from 'phaser'
 
 export default class HomeScene extends Phaser.Scene {
@@ -94,28 +98,16 @@ export default class HomeScene extends Phaser.Scene {
     this.load.image('ground2', ground2)
     this.load.image('ground3', ground3)
 
-    this.load.image('button_test', button_test)
   }
 
   public create(): void {
     // Set World Map
-    const map = [
-      [2, 2, 3, 3, 3, 3, 3, 3, 3, 3],
-      [1, 2, 1, 1, 1, 1, 1, 1, 3, 3],
-      [3, 2, 3, 1, 1, 1, 1, 3, 3, 3],
-      [3, 2, 1, 1, 1, 1, 3, 2, 2, 2],
-      [1, 2, 2, 1, 1, 3, 3, 2, 1, 1],
-      [1, 1, 2, 2, 1, 3, 3, 2, 1, 1],
-      [1, 1, 3, 2, 2, 3, 2, 1, 1, 1],
-      [1, 1, 3, 1, 2, 2, 1, 1, 1, 1],
-      [1, 1, 3, 1, 1, 2, 2, 3, 3, 3],
-      [1, 1, 1, 1, 1, 3, 2, 2, 3, 3],
-    ]
+    const map = savedMap1.floor
     const tiled = {
       x: 0,
       y: 0,
-      width: map[0].length,
-      height: map.length,
+      width: savedMap1.size[0],
+      height: savedMap1.size[1],
     }
     this.world = {
       x: 64 * tiled.x,
@@ -132,23 +124,6 @@ export default class HomeScene extends Phaser.Scene {
           .setDisplaySize(64, 64)
       })
     })
-
-    // const worldmap = this.add.tileSprite(
-    //   world.x,
-    //   world.y,
-    //   world.width,
-    //   world.height,
-    //   'ground1'
-    // )
-    // worldmap.setOrigin(0)
-
-    // Array.apply(null, Array(tiled.width)).map(Number.call, Number).forEach((widthIndex: number) => {
-    //   if (widthIndex % 2 == 0) {
-    //     this.add.image((tiled.x + widthIndex) * 64 , tiled.y * 64, 'ground2').setOrigin(0).setDisplaySize(64, 64)
-    //   } else {
-    //     this.add.image((tiled.x + widthIndex) * 64 , tiled.y * 64, 'ground3').setOrigin(0).setDisplaySize(64, 64)
-    //   }
-    // })
 
     this.physics.world.setBounds(
       this.world.x,
@@ -178,14 +153,11 @@ export default class HomeScene extends Phaser.Scene {
     })
 
     // Player
-    const playerBlockPos = {
-      x: 0,
-      y: 0,
-    }
+    const playerBlockPos = savedMap1.spawn[0]
     this.player = new Player(
       this,
-      this.world.x + 32 + 64 * playerBlockPos.x,
-      this.world.y + 32 + 64 * playerBlockPos.y,
+      this.world.x + 32 + 64 * playerBlockPos[0],
+      this.world.y + 32 + 64 * playerBlockPos[1],
       64,
       64,
       'Bob',
