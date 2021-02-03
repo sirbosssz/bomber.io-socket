@@ -23,7 +23,10 @@ import explosion4 from '../assets/character/skill/explosion4.png'
 import ground1 from '../assets/ground/ground1.png'
 import ground2 from '../assets/ground/ground2.png'
 import ground3 from '../assets/ground/ground3.png'
-
+import wall1 from '../assets/walls/wall1.png'
+import wall2 from '../assets/walls/wall2.png'
+import wall3 from '../assets/walls/wall3.png'
+import wall4 from '../assets/walls/wall4.png'
 // ui
 
 // saved maps
@@ -44,6 +47,7 @@ export default class HomeScene extends Phaser.Scene {
   private otherPlayers: Player[] = []
   private playerCursor
   private world: ICoordinate
+  private walls: Phaser.Physics.Arcade.StaticGroup
 
   constructor() {
     super({ key: 'HomeScene' })
@@ -63,10 +67,67 @@ export default class HomeScene extends Phaser.Scene {
     )
   }
 
-  public getCurrentPlayer(): Player[] {
+  private getCurrentPlayer(): Player[] {
     let currentPlayer = [this.player]
     currentPlayer = currentPlayer.concat(this.otherPlayers)
     return currentPlayer
+  }
+
+  private createMapFloor(): void {
+    // Set World Map
+    const map = savedMap1.floor
+    const tiled = {
+      x: 0,
+      y: 0,
+      width: savedMap1.size[0],
+      height: savedMap1.size[1],
+    }
+    this.world = {
+      x: 64 * tiled.x,
+      y: 64 * tiled.y,
+      width: 64 * tiled.width,
+      height: 64 * tiled.height,
+    }
+
+    map.forEach((mapRow: number[], row: number) => {
+      mapRow.forEach((mapCol: number, col: number) => {
+        this.add
+          .image((tiled.x + col) * 64, (tiled.y + row) * 64, `ground${mapCol}`)
+          .setOrigin(0)
+          .setDisplaySize(64, 64)
+      })
+    })
+
+    this.physics.world.setBounds(
+      this.world.x,
+      this.world.y,
+      this.world.width,
+      this.world.height
+    )
+  }
+
+  private createMapWalls(): void {
+    const walls = savedMap1.wall
+    this.walls = this.physics.add.staticGroup()
+    walls.forEach((wall: number[]) => {
+      this.createMapWall(wall)
+    })
+  }
+
+  private createMapWall(wallObject): void {
+    for (let col = 0; col <= wallObject[2] - 1; col++) {
+      for (let row = 0; row <= wallObject[3] - 1; row++) {
+        this.walls
+          .get(
+            (wallObject[0] + col) * 64 + 32,
+            (wallObject[1] + row) * 40 + 32,
+            `wall${wallObject[4]}`
+          )
+          .setSize(64, 40)
+          .setOffset(32)
+          .setDisplaySize(64, 64)
+      }
+    }
   }
 
   public init(): void {}
@@ -97,40 +158,18 @@ export default class HomeScene extends Phaser.Scene {
     this.load.image('ground1', ground1)
     this.load.image('ground2', ground2)
     this.load.image('ground3', ground3)
-
+    this.load.image('wall1', wall1)
+    this.load.image('wall2', wall2)
+    this.load.image('wall3', wall3)
+    this.load.image('wall4', wall4)
   }
 
   public create(): void {
-    // Set World Map
-    const map = savedMap1.floor
-    const tiled = {
-      x: 0,
-      y: 0,
-      width: savedMap1.size[0],
-      height: savedMap1.size[1],
-    }
-    this.world = {
-      x: 64 * tiled.x,
-      y: 64 * tiled.y,
-      width: 64 * tiled.width,
-      height: 64 * tiled.height,
-    }
-
-    map.forEach((mapRow, row) => {
-      mapRow.forEach((mapCol, col) => {
-        this.add
-          .image((tiled.x + col) * 64, (tiled.y + row) * 64, `ground${mapCol}`)
-          .setOrigin(0)
-          .setDisplaySize(64, 64)
-      })
-    })
-
-    this.physics.world.setBounds(
-      this.world.x,
-      this.world.y,
-      this.world.width,
-      this.world.height
-    )
+    // world map
+    this.createMapFloor()
+    
+    // walls
+    this.createMapWalls()
 
     // Camera
     // this.cameras.main.setBounds(0, 0, 1920 * 2, 1080 * 2);
@@ -167,31 +206,6 @@ export default class HomeScene extends Phaser.Scene {
       .setDepth(10)
 
     this.cameras.main.startFollow(this.player)
-
-    this.otherPlayers[0] = new Player(
-      this,
-      this.world.x + 32 + 64 * 5,
-      this.world.y + 32 + 64 * 2,
-      64,
-      64,
-      'Alice',
-    )
-
-    // FullScreen
-    // const fullscreenBtn = this.add
-    //   .image(0, 0, 'button_test')
-    //   .setInteractive()
-    //   .setOrigin(0, 0)
-    //   .setDisplaySize(64, 64)
-
-    // fullscreenBtn.on('pointerup', () => {
-    //   if (this.scale.isFullscreen) {
-    //     this.scale.stopFullscreen()
-    //   } else {
-    //     this.scale.startFullscreen()
-    //   }
-    // })
-
     this.playerCursor = this.input.keyboard.addKeys({
       // direction control
       up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -208,12 +222,22 @@ export default class HomeScene extends Phaser.Scene {
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
     })
 
+    this.otherPlayers[0] = new Player(
+      this,
+      this.world.x + 32 + 64 * 5,
+      this.world.y + 32 + 64 * 2,
+      64,
+      64,
+      'Alice'
+    )
+
     this.data.set('players', this.getCurrentPlayer())
+    this.physics.add.collider(this.player, this.walls)
   }
 
   public update(time: number, delta: number): void {
     this.player.playerUpdate(delta, this.playerCursor)
-    this.otherPlayers.forEach(player => {
+    this.otherPlayers.forEach((player) => {
       player.playerUpdate(delta)
     })
   }
