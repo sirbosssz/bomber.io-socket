@@ -9,7 +9,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   private health: number = 3
   private playerText: Phaser.GameObjects.Text
 
-  private skillBomb: IPlayerSkill = {
+  public skillBomb: IPlayerSkill = {
     cooldown: 1000,
     ready: true,
   }
@@ -129,8 +129,41 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       skillAction()
       setTimeout(() => {
         skill.ready = true
-        cooldownAction()
+        if (cooldownAction) {
+          cooldownAction()
+        }
       }, skill.cooldown)
+    }
+  }
+
+  public activeSkillBomb(delta: number, keyboard?: Phaser.Input.Keyboard.Key) {
+    this.skillControl(
+      keyboard,
+      this.skillBomb,
+      () => {
+        // console.log('bomb has been planted,', 'left:', this.skillBomb.count)
+        this.bomb = new Bomb(
+          this.scene,
+          this.body.position.x + this.body.width / 2,
+          this.body.position.y + this.body.height / 2
+        ).setDepth(11)
+
+        this.bombTarget = new Phaser.Math.Vector2(
+          this.skillArea.body.position.x + this.skillArea.displayWidth / 2,
+          this.skillArea.body.position.y + this.skillArea.displayHeight / 2
+        )
+      },
+      () => {
+        // console.log('can plant again!')
+      }
+    )
+    // check Bomb is Desroyed
+    if (this.bomb !== undefined) {
+      if (this.bomb.isDestroyed()) {
+        this.bomb = this.bomb.isDestroyed() ? undefined : this.bomb
+      } else {
+        this.bomb.moveto(this.bombTarget, delta)
+      }
     }
   }
 
@@ -167,14 +200,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   playerUpdate(delta: number, keyboard?: IPlayerCursor): void {
     // player health
     this.setData('health', this.health)
-
-
-    //check if not dead 
-    if (this.health <= 0) {
-      this.anims.stop()
-      return
-    }
-
     this.setVelocity(0)
 
     // set playertext
@@ -214,14 +239,25 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         moveTime
       )
     }, moveTime / 2)
+
+    //check if dead
+    if (this.health <= 0) {
+      this.anims.stop()
+      return
+    }
+
     if (this.controlable) {
+      // Move Control
       this.playerController(keyboard, delta)
+      // Skill: Plant a bomb
+      this.activeSkillBomb(delta, keyboard.space)
     }
   }
 
-  private dead():void {
+  private dead(): void {
     this.setAlpha(0.3)
     this.playerText.setAlpha(0.3)
+    this.skillArea.setAlpha(0.3)
   }
 
   private takeDamage(point: number): void {
@@ -265,36 +301,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (moving) {
       this.anims.stop()
       this.setTexture(`player_${this.status}`)
-    }
-
-    // Skill: Plant a bomb
-    this.skillControl(
-      keyboard.space,
-      this.skillBomb,
-      () => {
-        // console.log('bomb has been planted,', 'left:', this.skillBomb.count)
-        this.bomb = new Bomb(
-          this.scene,
-          this.body.position.x + this.body.width / 2,
-          this.body.position.y + this.body.height / 2
-        ).setDepth(11)
-
-        this.bombTarget = new Phaser.Math.Vector2(
-          this.skillArea.body.position.x + this.skillArea.displayWidth / 2,
-          this.skillArea.body.position.y + this.skillArea.displayHeight / 2
-        )
-      },
-      () => {
-        // console.log('can plant again!')
-      }
-    )
-    // check Bomb is Desroyed
-    if (this.bomb !== undefined) {
-      if (this.bomb.isDestroyed()) {
-        this.bomb = this.bomb.isDestroyed() ? undefined : this.bomb
-      } else {
-        this.bomb.moveto(this.bombTarget, delta)
-      }
     }
   }
 }

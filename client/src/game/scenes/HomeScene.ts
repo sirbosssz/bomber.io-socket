@@ -170,7 +170,7 @@ export default class HomeScene extends Phaser.Scene {
   public create(): void {
     // world map
     this.createMapFloor()
-    
+
     // walls
     this.createMapWalls()
 
@@ -239,14 +239,25 @@ export default class HomeScene extends Phaser.Scene {
   }
 
   public update(time: number, delta: number): void {
+    // update player
     this.player.playerUpdate(delta, this.playerCursor)
     this.otherPlayers.forEach((player) => {
-      player.playerUpdate(delta)
+      player.playerUpdate(delta, this.playerCursor)
     })
-    let controlPlayerHealth = this.player.getData('health')
-    if (controlPlayerHealth <= 0 && !this.gameOver) {
-      console.log('you are dead');
+
+    // update current player health
+    if (this.player.getData('health') <= 0 && !this.gameOver) {
+      console.log('you are dead')
       this.gameOver = true
+    }
+
+    // test skill
+    const debuggerKey = this.input.keyboard.addKey('T')
+    this.otherPlayers[0].activeSkillBomb(delta, debuggerKey)
+    if (debuggerKey.isDown) {
+      console.log('debug')
+
+      // this.otherPlayers[0].activeSkillBomb(delta, debuggerKey)
     }
   }
 }
