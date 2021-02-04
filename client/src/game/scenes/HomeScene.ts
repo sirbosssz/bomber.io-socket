@@ -46,8 +46,11 @@ export default class HomeScene extends Phaser.Scene {
   private player: Player
   private otherPlayers: Player[] = []
   private playerCursor
+
   private world: ICoordinate
   private walls: Phaser.Physics.Arcade.StaticGroup
+
+  private gameOver: boolean = false
 
   constructor() {
     super({ key: 'HomeScene' })
@@ -229,7 +232,7 @@ export default class HomeScene extends Phaser.Scene {
       64,
       64,
       'Alice'
-    )
+    ).setDepth(1)
 
     this.data.set('players', this.getCurrentPlayer())
     this.physics.add.collider(this.player, this.walls)
@@ -240,5 +243,10 @@ export default class HomeScene extends Phaser.Scene {
     this.otherPlayers.forEach((player) => {
       player.playerUpdate(delta)
     })
+    let controlPlayerHealth = this.player.getData('health')
+    if (controlPlayerHealth <= 0 && !this.gameOver) {
+      console.log('you are dead');
+      this.gameOver = true
+    }
   }
 }

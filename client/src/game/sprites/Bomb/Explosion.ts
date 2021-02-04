@@ -14,7 +14,7 @@ export default class Explosion extends Phaser.GameObjects.Sprite {
     this.setDisplaySize(
       (this.radius + 1) * 64,
       (this.radius + 1) * 64
-    ).setDepth(11)
+    ).setDepth(12)
 
     // explode area
     this.area = scene.physics.add

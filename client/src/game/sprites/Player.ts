@@ -6,11 +6,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   private speed: number = 5000
   private status: string = 'turndown'
   private controlable: boolean = false
+  private health: number = 3
+  private playerText: Phaser.GameObjects.Text
+
   private skillBomb: IPlayerSkill = {
     cooldown: 1000,
     ready: true,
   }
-  private playerText: Phaser.GameObjects.Text
   private skillArea: Phaser.Physics.Arcade.Image
 
   private bomb: Bomb = undefined
@@ -40,7 +42,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     // add player text
     this.playerText = scene.add
-      .text(x, y - height / 2, this.name, {
+      .text(x, y - height / 2, `${this.name} ♥${this.health}`, {
         color: 'black',
         fontSize: '16pt',
         fontStyle: 'bold',
@@ -52,10 +54,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       .image(x, y + 64, 'bomb_area')
       .setDisplaySize(64, 64)
       .setCollideWorldBounds(true)
+      .setDepth(20)
     if (controlable === false) {
       this.skillArea.setAlpha(0)
     }
 
+    // player health
+    this.setData('health', this.health)
     // player take damage
     this.addListener('takedamage', this.takeDamage)
 
@@ -158,7 +163,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.status = `turn${direction}`
     }
   }
+
   playerUpdate(delta: number, keyboard?: IPlayerCursor): void {
+    // player health
+    this.setData('health', this.health)
+
+
+    //check if not dead 
+    if (this.health <= 0) {
+      this.anims.stop()
+      return
+    }
+
     this.setVelocity(0)
 
     // set playertext
@@ -203,9 +219,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  public takeDamage(point: number): void {
-    console.log(`${this.name} take damage: ${point}`);
-    
+  private dead():void {
+    this.setAlpha(0.3)
+    this.playerText.setAlpha(0.3)
+  }
+
+  private takeDamage(point: number): void {
+    if (this.health > point) {
+      this.health -= point
+    } else {
+      this.health = 0
+      this.dead()
+      console.log(`${this.name} is dead`)
+    }
+    this.playerText.setText(`${this.name} ♥${this.health}`)
+    // console.log(`${this.name} take damage: ${point}, remaining: ${this.health}`);
   }
 
   private playerController(keyboard: IPlayerCursor, delta: number): void {
@@ -249,7 +277,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           this.scene,
           this.body.position.x + this.body.width / 2,
           this.body.position.y + this.body.height / 2
-        ).setDepth(1)
+        ).setDepth(11)
 
         this.bombTarget = new Phaser.Math.Vector2(
           this.skillArea.body.position.x + this.skillArea.displayWidth / 2,
