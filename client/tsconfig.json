@@ -3,9 +3,10 @@
     "target": "esnext",
     "module": "ESNext",
     "moduleResolution": "node",
-    "sourceMap": true,
+    "strict": false,
+    "sourceMap": true
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "src/ui/main.js"],
   "typeRoots": ["./node_modules/phaser/types"],
   "types": ["Phaser"]
 }

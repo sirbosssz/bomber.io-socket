@@ -8,7 +8,7 @@ const [DEFAULT_WIDTH, DEFAULT_HEIGHT, MAX_WIDTH, MAX_HEIGHT] = [
   864,
 ]
 
-const config: Phaser.Types.Core.GameConfig = {
+export const config: Phaser.Types.Core.GameConfig = {
   backgroundColor: '#fafafa',
   scale: {
     parent: 'app',
@@ -26,7 +26,7 @@ const config: Phaser.Types.Core.GameConfig = {
   },
 }
 
-let gameInstance
-window.addEventListener('load', () => {
-  gameInstance = new Phaser.Game(config)
-})
+// let gameInstance
+// window.addEventListener('load', () => {
+//   gameInstance = new Phaser.Game(config)
+// })
