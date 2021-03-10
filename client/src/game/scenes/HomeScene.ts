@@ -168,6 +168,9 @@ export default class HomeScene extends Phaser.Scene {
   }
 
   public create(): void {
+    // tell the game that what scene is running
+    this.game.events.emit('changescene', this)
+
     // world map
     this.createMapFloor()
 
