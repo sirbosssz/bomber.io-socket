@@ -2,21 +2,25 @@
   <div class="ui-page-home fullscreen f-center">
     <div class="container">
       <ui-title>The Bombermann</ui-title>
-      <h2>What's your player name?</h2>
+      <ui-subtitle>What's your player name?</ui-subtitle>
       insert here
+      <ui-name-form></ui-name-form>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { UiTitle } from '../components'
+import { UiTitle, UiSubtitle, UiNameForm } from '../components'
 
 export default defineComponent({
   name: 'ui-page-home',
   components: {
     UiTitle,
+    UiSubtitle,
+    UiNameForm,
   },
+  setup() {},
 })
 </script>
 

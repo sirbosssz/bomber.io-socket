@@ -1,20 +1,20 @@
 <template>
-  <h1 class="title">
+  <h2 class="subtitle">
     <slot></slot>
-  </h1>
+  </h2>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'ui-title',
+  name: 'ui-subtitle',
 })
 </script>
 
 <style lang="sass" scoped>
-.title
-  font-size: 38pt
+.subtitle
+  font-size: 18pt
   margin:
     top: 0.2em
     bottom: 0.2em

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, provide, readonly, ref, Ref, watch } from 'vue'
 import { UiCanvas } from './components'
 import 'phaser'
 import { config } from '../game/index'
@@ -15,19 +15,43 @@ export default defineComponent({
     UiCanvas,
   },
   setup() {
-    const text: string = 'Hello World'
-    let start: boolean = false
     let game: Phaser.Game = undefined
 
-    if (start) {
-      game = new Phaser.Game(config)
-
-      // get current scene
-      game.events.on('changescene', (scene: Phaser.Scene) => {
-        console.log(scene)
-      })
+    const start: Ref<boolean> = ref(false)
+    const startGame = () => {
+      start.value = true
     }
-    return { text, game }
+    const stopGame = () => {
+      start.value = false
+    }
+    provide('gameState', readonly(start))
+    provide('startGame', startGame)
+    provide('stopGame', stopGame)
+
+    const playerName: Ref<string> = ref('Player')
+    const changePlayerName = (name) => {
+      playerName.value = name
+    }
+
+    provide('playerName', readonly(playerName))
+    provide('changePlayerName', changePlayerName)
+
+    watch(start, () => {
+      if (start.value) {
+        game = new Phaser.Game(config)
+
+        // get current scene
+        game.events.on('changescene', (scene: Phaser.Scene) => {
+          console.log(scene)
+          scene.data.set('playerName', playerName.value)
+        })
+      } else {
+        if (game !== undefined) {
+          game.destroy(true)
+        }
+      }
+    })
+    return { start }
   },
 })
 </script>

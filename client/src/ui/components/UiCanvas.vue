@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, inject, provide, ref, watch } from 'vue'
 import { UiPageHome } from '../pages'
 
 export default defineComponent({
@@ -14,7 +14,22 @@ export default defineComponent({
     UiPageHome,
   },
   setup() {
-    let page: string = 'home'
+    // pages case: home, game, game-over
+    const page = ref('home')
+    const toPage = (value) => {
+      page.value = value
+    }
+    provide('toPage', toPage)
+
+    const startGame = inject('startGame', () => {})
+
+    watch(page, () => {
+      if (page.value == 'game') {
+        console.log('to game page')
+        startGame()
+      }
+    })
+
     return { page }
   },
 })

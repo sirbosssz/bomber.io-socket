@@ -205,7 +205,7 @@ export default class HomeScene extends Phaser.Scene {
       this.world.y + 32 + 64 * playerBlockPos[1],
       64,
       64,
-      'Bob',
+      this.data.get('playerName'),
       true
     )
       .setCollideWorldBounds(true)
