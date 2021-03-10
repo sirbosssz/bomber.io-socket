@@ -3,10 +3,17 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "parcel serve ./src/index.html",
+    "start": "parcel serve ./src/index.html -p 8000",
     "build": "parcel build ./src/index.html"
   },
   "devDependencies": {
-    "parcel": "^2.0.0-beta.1"
+    "@parcel/transformer-vue": "2.0.0-nightly.2243",
+    "@vue/compiler-sfc": "^3.0.7",
+    "parcel": "^2.0.0-nightly.619",
+    "sass": "^1.32.8"
+  },
+  "dependencies": {
+    "phaser": "^3.51.0",
+    "vue": "^3.0.7"
   }
 }

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "strict": false,
+    "sourceMap": true
+  },
+  "include": ["**/*.ts", "src/ui/main.js"],
+  "typeRoots": ["./node_modules/phaser/types"],
+  "types": ["Phaser"]
+}
