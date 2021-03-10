@@ -14,7 +14,7 @@ export default defineComponent({
     UiPageHome,
   },
   setup() {
-    // pages case: home, game, game-over
+    // pages case: home, lobby, game, game-over
     const page = ref('home')
     const toPage = (value) => {
       page.value = value

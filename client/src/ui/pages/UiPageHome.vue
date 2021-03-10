@@ -3,7 +3,6 @@
     <div class="container">
       <ui-title>The Bombermann</ui-title>
       <ui-subtitle>What's your player name?</ui-subtitle>
-      insert here
       <ui-name-form></ui-name-form>
     </div>
   </div>

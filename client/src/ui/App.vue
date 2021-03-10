@@ -28,7 +28,7 @@ export default defineComponent({
     provide('startGame', startGame)
     provide('stopGame', stopGame)
 
-    const playerName: Ref<string> = ref('Player')
+    const playerName: Ref<string> = ref('')
     const changePlayerName = (name) => {
       playerName.value = name
     }
@@ -42,7 +42,7 @@ export default defineComponent({
 
         // get current scene
         game.events.on('changescene', (scene: Phaser.Scene) => {
-          console.log(scene)
+          // console.log(scene)
           scene.data.set('playerName', playerName.value)
         })
       } else {
