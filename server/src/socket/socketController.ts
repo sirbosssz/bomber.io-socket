@@ -10,19 +10,25 @@ export default (server: http.Server) => {
     // console.log(`client connected, id: ${socket.id}`)
     socket.emit('player-list', playerList)
 
-    socket.on('join-room', (name: string) => {
-      io.emit('join-room', name)
+    socket.on('join-lobby', (name: string) => {
+      socket.broadcast.emit('join-lobby', name)
 
       playerList = playerList.filter((player) => player.id !== socket.id)
       playerList.push({ id: socket.id, name: name })
       io.emit('player-list', playerList)
     })
 
-    socket.on('disconnect', (reason) => {
-      console.log(`client disconnect: ${reason}, id: ${socket.id}`)
+    socket.on('left-lobby', (leftPlayer) => {
+      console.log(leftPlayer)
+    })
 
-      // filter playerList
-      playerList = playerList.filter((player) => player.id !== socket.id)
+    socket.on('disconnect', (reason) => {
+      const leftPlayer = playerList.find((player) => player.id === socket.id)
+      if (leftPlayer !== undefined) {
+        io.emit('left-lobby', leftPlayer)
+      }
+
+      playerList = playerList.filter((player) => player !== leftPlayer)
       io.emit('player-list', playerList)
     })
   })
