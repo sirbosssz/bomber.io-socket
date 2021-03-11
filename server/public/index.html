@@ -9,7 +9,8 @@
   <body>
     <h1>open console to see debug</h1>
     <input type="text" name="name" id="name" placeholder="type a name" />
-    <button onclick="debug()">Debug Here</button>
+    <button onclick="joinroom()">Join</button>
+    <button onclick="leftroom()">Left</button>
     <div id="info">...</div>
     <div class="players">
       <h2 id="online">Online(0)</h2>
@@ -28,8 +29,11 @@
       const textonline = document.querySelector('#online')
       const socket = io('http://localhost:5000')
 
+      const player = {}
+
       socket.on('connect', () => {
         // console.log(`${socket.id} connected.`)
+        player.id = socket.id
       })
 
       socket.on('player-list', (list) => {
@@ -58,10 +62,16 @@
         }, 5000)
       }
 
-      function debug() {
+      function joinroom() {
         const value = textinput.value
+        player.name = value
         socket.emit('join-lobby', value)
-        console.log('debugged')
+      }
+
+      function leftroom() {
+        if (player.name) {
+          socket.emit('left-lobby', player)
+        }
       }
     </script>
   </body>

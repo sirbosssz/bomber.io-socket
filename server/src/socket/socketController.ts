@@ -7,7 +7,6 @@ export default (server: http.Server) => {
 
   io.on('connection', (socket: Socket) => {
     // client connected handling
-    // console.log(`client connected, id: ${socket.id}`)
     socket.emit('player-list', playerList)
 
     socket.on('join-lobby', (name: string) => {
@@ -19,7 +18,9 @@ export default (server: http.Server) => {
     })
 
     socket.on('left-lobby', (leftPlayer) => {
-      console.log(leftPlayer)
+      playerList = playerList.filter((player) => player.id !== leftPlayer.id)
+      io.emit('player-list', playerList)
+      io.emit('left-lobby', leftPlayer)
     })
 
     socket.on('disconnect', (reason) => {
