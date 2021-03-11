@@ -11,9 +11,7 @@
     <input type="text" name="name" id="name" placeholder="type a name" />
     <button onclick="debug()">Debug Here</button>
     <div id="info"></div>
-    <ul id="players">
-
-    </ul>
+    <ul id="players"></ul>
 
     <script
       src="https://cdn.socket.io/3.1.1/socket.io.min.js"
@@ -23,10 +21,20 @@
     <script>
       const textinput = document.querySelector('#name')
       const divinfo = document.querySelector('#info')
+      const ulplayers = document.querySelector('#players')
       const socket = io('http://localhost:5000')
 
       socket.on('connect', () => {
-        console.log(`${socket.id} connected.`);
+        console.log(`${socket.id} connected.`)
+      })
+
+      socket.on('player-list', (list) => {
+        ulplayers.innerHTML = ''
+        list.forEach((player) => {
+          let li = document.createElement('li')
+          li.textContent = player.name
+          ulplayers.appendChild(li)
+        })
       })
 
       socket.on('join-room', (data) => {
