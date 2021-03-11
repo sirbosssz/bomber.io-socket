@@ -7,8 +7,13 @@
     <title>Socket Debugger</title>
   </head>
   <body>
-    <h1>open console to se debug</h1>
+    <h1>open console to see debug</h1>
+    <input type="text" name="name" id="name" placeholder="type a name" />
     <button onclick="debug()">Debug Here</button>
+    <div id="info"></div>
+    <ul id="players">
+
+    </ul>
 
     <script
       src="https://cdn.socket.io/3.1.1/socket.io.min.js"
@@ -16,7 +21,24 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      const socket = io()
+      const textinput = document.querySelector('#name')
+      const divinfo = document.querySelector('#info')
+      const socket = io('http://localhost:5000')
+
+      socket.on('connect', () => {
+        console.log(`${socket.id} connected.`);
+      })
+
+      socket.on('join-room', (data) => {
+        divinfo.innerHTML = `${data} have joined.`
+        console.log(`${data} have joined.`)
+      })
+
+      function debug() {
+        const value = textinput.value
+        socket.emit('join-room', value)
+        console.log('debugged')
+      }
     </script>
   </body>
 </html>
