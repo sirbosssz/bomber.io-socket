@@ -33,7 +33,7 @@ export default defineComponent({
       }
       console.log(`form submit, player name: ${name.value}`)
       changePlayerName(name.value)
-      toPage('lobby')
+      toPage('game')
     }
     return { name, submitName }
   },

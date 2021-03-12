@@ -1,5 +1,5 @@
 import express, { Application, Request, Response } from 'express'
-import http, { createServer } from 'http'
+import { createServer } from 'http'
 import cors from 'cors'
 
 import router from './router'
@@ -13,8 +13,9 @@ const CORS_OPTION = {
 }
 
 const app: Application = express()
-const server = createServer(app)
 app.use(cors(CORS_OPTION))
+
+const server = createServer(app)
 
 router(app)
 socket(server)

@@ -12,6 +12,8 @@
 import { defineComponent } from 'vue'
 import { UiTitle, UiSubtitle, UiNameForm } from '../components'
 
+import socket from '../../socket'
+
 export default defineComponent({
   name: 'ui-page-home',
   components: {
@@ -19,7 +21,11 @@ export default defineComponent({
     UiSubtitle,
     UiNameForm,
   },
-  setup() {},
+  setup() {
+    socket.on('player-list', (list) => {
+      console.log(list)
+    })
+  },
 })
 </script>
 
