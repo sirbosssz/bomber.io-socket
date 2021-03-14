@@ -27,7 +27,9 @@
       const divinfo = document.querySelector('#info')
       const ulplayers = document.querySelector('#players')
       const textonline = document.querySelector('#online')
-      const socket = io('http://localhost:5000/')
+      const socket = io('http://localhost:5000/', {
+        path: '/socket'
+      })
 
       const player = {}
 

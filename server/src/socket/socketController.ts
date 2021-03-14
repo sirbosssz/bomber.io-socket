@@ -2,7 +2,9 @@ import http from 'http'
 import { Server, Socket } from 'socket.io'
 
 export default (server: http.Server) => {
-  const io = new Server(server)
+  const io = new Server(server, {
+    path: '/socket'
+  })
   let playerList: any[] = []
 
   io.on('connection', (socket: Socket) => {
