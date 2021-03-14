@@ -13,7 +13,6 @@ const CORS_OPTION = {
 }
 
 const app: Application = express()
-app.use(cors(CORS_OPTION))
 
 const server = createServer(app)
 
