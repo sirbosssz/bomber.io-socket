@@ -17,6 +17,8 @@
 <script lang="ts">
 import { defineComponent, inject, Ref, ref } from 'vue'
 
+import socket from '../../socket'
+
 export default defineComponent({
   setup() {
     const playerName: Ref<string> = inject('playerName')
@@ -31,9 +33,10 @@ export default defineComponent({
         alert(`Can't leave name empty.`)
         return
       }
-      console.log(`form submit, player name: ${name.value}`)
+      socket.emit('join-lobby', name.value)
+      // console.log(`form submit, player name: ${name.value}`)
       changePlayerName(name.value)
-      toPage('game')
+      toPage('lobby')
     }
     return { name, submitName }
   },
@@ -49,8 +52,6 @@ export default defineComponent({
   font-size: 10pt
   margin:
     bottom: 0.1em
-.hilight
-  color: $btn
 input
   font-size: 12pt
   margin: 0.2em

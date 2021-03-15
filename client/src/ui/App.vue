@@ -9,6 +9,7 @@ import { defineComponent, provide, readonly, ref, Ref, watch } from 'vue'
 import { UiCanvas } from './components'
 import 'phaser'
 import { config } from '../game/index'
+import socket from '../socket'
 
 export default defineComponent({
   components: {
@@ -32,9 +33,14 @@ export default defineComponent({
     const changePlayerName = (name) => {
       playerName.value = name
     }
-
     provide('playerName', readonly(playerName))
     provide('changePlayerName', changePlayerName)
+
+    const socketId = ref('')
+    provide('socketId', socketId)
+    socket.on('connect', () => {
+      socketId.value = socket.id
+    })
 
     watch(start, () => {
       if (start.value) {

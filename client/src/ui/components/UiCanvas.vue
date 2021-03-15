@@ -1,17 +1,19 @@
 <template>
   <div class="ui-canvas">
     <ui-page-home v-if="page === 'home'"></ui-page-home>
+    <ui-page-lobby v-if="page === 'lobby'"></ui-page-lobby>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, inject, provide, ref, watch } from 'vue'
-import { UiPageHome } from '../pages'
+import { UiPageHome, UiPageLobby } from '../pages'
 
 export default defineComponent({
   name: 'ui-canvas',
   components: {
     UiPageHome,
+    UiPageLobby,
   },
   setup() {
     // pages case: home, lobby, game, game-over
