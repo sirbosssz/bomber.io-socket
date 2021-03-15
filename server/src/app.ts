@@ -1,16 +1,11 @@
 import express, { Application, Request, Response } from 'express'
 import { createServer } from 'http'
-import cors from 'cors'
 
 import router from './router'
 import { socket } from './socket'
 
 const SOCKET_PORT = process.env.SOCKET_PORT || 5000
 const API_PORT = process.env.API_PORT || 5500
-
-const CORS_OPTION = {
-  origin: '*'
-}
 
 const app: Application = express()
 
