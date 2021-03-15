@@ -50,14 +50,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         fontStyle: 'bold',
       })
       .setOrigin(0.5)
-      .setDepth(2000)
+      .setDepth(21000)
 
     // add place bomb area
     this.skillArea = scene.physics.add
       .image(x, y + 64, 'bomb_area')
       .setDisplaySize(64, 64)
       .setCollideWorldBounds(true)
-      .setDepth(2000)
+      .setDepth(21000)
     if (controlable === false) {
       this.skillArea.setAlpha(0)
     }
@@ -149,7 +149,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           this.scene,
           this.body.position.x + this.body.width / 2,
           this.body.position.y + this.body.height / 2
-        ).setDepth(11)
+        ).setDepth(20001)
 
         this.bombTarget = new Phaser.Math.Vector2(
           this.skillArea.body.position.x + this.skillArea.displayWidth / 2,
@@ -206,7 +206,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.setVelocity(0)
 
     // fix depth
-    this.setDepth(Math.floor(this.body.position.y / 64) * 10 + 1)
+    this.setDepth(
+      Math.floor(this.body.position.y / 64) * 10 + (this.controlable ? 2 : 1)
+    )
 
     // set playertext
     this.playerText
