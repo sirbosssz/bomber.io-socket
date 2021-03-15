@@ -3,7 +3,11 @@ import { Server, Socket } from 'socket.io'
 
 export default (server: http.Server) => {
   const io = new Server(server, {
-    path: '/socket'
+    path: '/socket',
+    cors: {
+      origin: 'http://localhost:8000',
+      methods: ["GET", "POST"]
+    }
   })
   let playerList: any[] = []
 
