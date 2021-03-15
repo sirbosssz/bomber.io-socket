@@ -1,6 +1,7 @@
 <template>
   <div class="ui-page-home fullscreen f-center">
     <div class="container">
+      <ui-title>💣</ui-title>
       <ui-title>The Bombermann</ui-title>
       <ui-subtitle>What's your player name?</ui-subtitle>
       <ui-name-form></ui-name-form>
@@ -22,9 +23,9 @@ export default defineComponent({
     UiNameForm,
   },
   setup() {
-    socket.on('player-list', (list) => {
-      console.log(list)
-    })
+    // socket.on('player-list', (list) => {
+    //   console.log(list)
+    // })
   },
 })
 </script>

@@ -118,17 +118,19 @@ export default class HomeScene extends Phaser.Scene {
   }
 
   private createMapWall(wallObject): void {
-    for (let col = 0; col <= wallObject[2] - 1; col++) {
-      for (let row = 0; row <= wallObject[3] - 1; row++) {
+    for (let row = 0; row <= wallObject[3] - 1; row++) {
+      for (let col = 0; col <= wallObject[2] - 1; col++) {
+        
         this.walls
-          .get(
-            (wallObject[0] + col) * 64 + 32,
-            (wallObject[1] + row) * 40 + 32,
-            `wall${wallObject[4]}`
+        .get(
+          (wallObject[0] + col) * 64 + 32,
+          (wallObject[1] + row) * 64 + 32,
+          `wall${wallObject[4]}`
           )
           .setSize(64, 40)
-          .setOffset(32)
+          .setOffset(32, 56)
           .setDisplaySize(64, 64)
+          .setDepth((wallObject[1] + row + 1) * 10)
       }
     }
   }
@@ -207,9 +209,7 @@ export default class HomeScene extends Phaser.Scene {
       64,
       this.data.get('playerName'),
       true
-    )
-      .setCollideWorldBounds(true)
-      .setDepth(10)
+    ).setCollideWorldBounds(true)
 
     this.cameras.main.startFollow(this.player)
     this.playerCursor = this.input.keyboard.addKeys({
