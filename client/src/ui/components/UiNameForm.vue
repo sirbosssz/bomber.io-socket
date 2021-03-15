@@ -58,6 +58,7 @@ input
   &:focus
     outline: none
 .textinput
+  -webkit-appearance: none
   padding:
     left: 0.8em
     right: 0.8em
@@ -73,6 +74,7 @@ input
       color: $btn-hover
 
 .btn
+  -webkit-appearance: none
   background: $btn
   color: $background
   cursor: pointer

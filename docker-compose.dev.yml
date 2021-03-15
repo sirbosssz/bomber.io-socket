@@ -22,10 +22,12 @@ services:
     stdin_open: true
     tty: true
     restart: 'no'
+    ports:
+      - "8010:8010"
 
   nginx:
     ports: 
-      - "8080:80"
+      - "8000:80"
     volumes:
       - ./nginx/config/conf.d:/etc/nginx/conf.d
       - ./nginx/config/nginx.conf:/app/nginx/conf.d
