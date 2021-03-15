@@ -22,3 +22,14 @@ services:
     stdin_open: true
     tty: true
     restart: 'no'
+
+  nginx:
+    ports: 
+      - "8080:80"
+    volumes:
+      - ./nginx/config/conf.d:/etc/nginx/conf.d
+      - ./nginx/config/nginx.conf:/app/nginx/conf.d
+      - ./nginx/errors:/usr/share/nginx/html/errors
+    restart: 'no'
+    logging: 
+      driver: none
