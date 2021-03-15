@@ -11,15 +11,19 @@
         <span :class="{ hilight: player.id == id }">{{ player.name }}</span>
       </div>
       <div class="control">
-        <ui-btn v-if="isHost" class="btn">Start</ui-btn>
-        <ui-btn class="btn" type="secondary" @click="navigate('home')">Back</ui-btn>
+        <ui-btn v-if="isHost" class="btn" @click="navigate('game')"
+          >Start</ui-btn
+        >
+        <ui-btn class="btn" type="secondary" @click="navigate('home')">
+          Back
+        </ui-btn>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, Ref, ref, watch } from 'vue'
+import { defineComponent, inject, Ref, ref } from 'vue'
 import { UiTitle, UiSubtitle, UiBtn } from '../components'
 
 import socket from '../../socket'
@@ -39,13 +43,23 @@ export default defineComponent({
     const playerList: Ref = ref([])
     const toPage = inject('toPage', (value: string) => value)
 
-    const navigate = () => {
-      socket.emit('left-lobby', {
-        name: name.value,
-        id: id.value,
-      })
-      toPage('home')
+    const navigate = (page: string) => {
+      if (page == 'home') {
+        socket.emit('left-lobby', {
+          name: name.value,
+          id: id.value,
+        })
+      } else if (page == 'game') {
+        socket.emit('game-start', true)
+      }
+      toPage(page)
     }
+
+    socket.on('game-start', (start) => {
+      if (start) {
+        toPage('game')
+      }
+    })
 
     socket.on('player-list', (list) => {
       isHost.value = list[0].id == id.value
@@ -70,4 +84,6 @@ export default defineComponent({
 .control
   margin:
     top: 1em
+.grey
+  color: #cccccc
 </style>

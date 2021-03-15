@@ -50,6 +50,7 @@ export default defineComponent({
         game.events.on('changescene', (scene: Phaser.Scene) => {
           // console.log(scene)
           scene.data.set('playerName', playerName.value)
+          scene.data.set('playerId', socketId.value)
         })
       } else {
         if (game !== undefined) {

@@ -6,8 +6,8 @@ export default (server: http.Server) => {
     path: '/socket',
     cors: {
       origin: 'http://localhost:8000',
-      methods: ["GET", "POST"]
-    }
+      methods: ['GET', 'POST'],
+    },
   })
   let playerList: any[] = []
 
@@ -27,6 +27,10 @@ export default (server: http.Server) => {
       playerList = playerList.filter((player) => player.id !== leftPlayer.id)
       io.emit('player-list', playerList)
       io.emit('left-lobby', leftPlayer)
+    })
+
+    socket.on('game-start', (state) => {
+      io.emit('game-start', state)
     })
 
     socket.on('disconnect', (reason) => {
