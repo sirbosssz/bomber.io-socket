@@ -5,6 +5,7 @@
       <ui-title>The Bombermann</ui-title>
       <ui-subtitle>What's your player name?</ui-subtitle>
       <ui-name-form></ui-name-form>
+      <p class="info">Development in progress...</p>
     </div>
   </div>
 </template>
@@ -36,4 +37,8 @@ export default defineComponent({
 
 .container
   text-align: center
+
+.info
+  color: $btn
+  font-weight: bold
 </style>

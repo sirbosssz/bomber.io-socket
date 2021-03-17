@@ -227,7 +227,7 @@ export default class HomeScene extends Phaser.Scene {
       // action control
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
     })
-    const otherPlayerBlockPos = savedMap1.spawn[9]
+    const otherPlayerBlockPos = savedMap1.spawn[1]
     this.otherPlayers[0] = new Player(
       this,
       this.world.x + 32 + 64 * otherPlayerBlockPos[0],
