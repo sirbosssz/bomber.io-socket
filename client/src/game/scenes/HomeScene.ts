@@ -200,7 +200,7 @@ export default class HomeScene extends Phaser.Scene {
     })
 
     // Player
-    const playerBlockPos = savedMap1.spawn[0]
+    const playerBlockPos = savedMap1.spawn[8]
     this.player = new Player(
       this,
       this.world.x + 32 + 64 * playerBlockPos[0],
@@ -227,11 +227,11 @@ export default class HomeScene extends Phaser.Scene {
       // action control
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
     })
-
+    const otherPlayerBlockPos = savedMap1.spawn[9]
     this.otherPlayers[0] = new Player(
       this,
-      this.world.x + 32 + 64 * 5,
-      this.world.y + 32 + 64 * 2,
+      this.world.x + 32 + 64 * otherPlayerBlockPos[0],
+      this.world.y + 32 + 64 * otherPlayerBlockPos[1],
       64,
       64,
       'Alice'
