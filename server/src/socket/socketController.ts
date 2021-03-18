@@ -1,6 +1,8 @@
 import http from 'http'
 import { Server, Socket } from 'socket.io'
 
+import { randArr } from '../functions/random'
+
 export default (server: http.Server) => {
   const io = new Server(server, {
     path: '/socket',
@@ -10,6 +12,7 @@ export default (server: http.Server) => {
     },
   })
   let playerList: any[] = []
+  let playerSpawn: number[] = []
 
   io.on('connection', (socket: Socket) => {
     // client connected handling
@@ -33,6 +36,13 @@ export default (server: http.Server) => {
       io.emit('game-start', state)
     })
 
+    socket.on('get-spawn-list', (state) => {
+      if (playerSpawn.length <= 0) {
+        playerSpawn = randArr(playerList.length)
+      }
+      socket.emit('spawn-list', playerSpawn)
+    })
+
     socket.on('disconnect', (reason) => {
       const leftPlayer = playerList.find((player) => player.id === socket.id)
       if (leftPlayer !== undefined) {
@@ -41,6 +51,10 @@ export default (server: http.Server) => {
 
       playerList = playerList.filter((player) => player !== leftPlayer)
       io.emit('player-list', playerList)
+
+      if (playerList.length <= 0) {
+        playerSpawn = []
+      }
     })
   })
 }

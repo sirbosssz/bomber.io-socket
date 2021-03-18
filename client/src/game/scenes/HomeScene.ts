@@ -40,6 +40,9 @@ import getSafeArea from '../../data/safeArea'
 import getClientArea from '../../data/clientArea'
 import ICoordinate from '../types/ICoordinate'
 
+// socket listener
+import socket from '../../socket'
+
 import * as Phaser from 'phaser'
 
 export default class HomeScene extends Phaser.Scene {
@@ -120,12 +123,11 @@ export default class HomeScene extends Phaser.Scene {
   private createMapWall(wallObject): void {
     for (let row = 0; row <= wallObject[3] - 1; row++) {
       for (let col = 0; col <= wallObject[2] - 1; col++) {
-        
         this.walls
-        .get(
-          (wallObject[0] + col) * 64 + 32,
-          (wallObject[1] + row) * 64 + 32,
-          `wall${wallObject[4]}`
+          .get(
+            (wallObject[0] + col) * 64 + 32,
+            (wallObject[1] + row) * 64 + 32,
+            `wall${wallObject[4]}`
           )
           .setSize(64, 40)
           .setOffset(32, 56)
@@ -227,6 +229,13 @@ export default class HomeScene extends Phaser.Scene {
       // action control
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
     })
+
+    // Other Players
+    socket.emit('get-spawn-list', true)
+    socket.on('spawn-list', (list) => {
+      console.log(list)
+    })
+
     const otherPlayerBlockPos = savedMap1.spawn[1]
     this.otherPlayers[0] = new Player(
       this,
