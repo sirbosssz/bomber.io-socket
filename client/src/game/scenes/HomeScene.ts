@@ -200,7 +200,7 @@ export default class HomeScene extends Phaser.Scene {
     })
 
     // Player
-    const playerBlockPos = savedMap1.spawn[8]
+    const playerBlockPos = savedMap1.spawn[0]
     this.player = new Player(
       this,
       this.world.x + 32 + 64 * playerBlockPos[0],
