@@ -202,11 +202,10 @@ export default class HomeScene extends Phaser.Scene {
     })
 
     // Player
-    const playerBlockPos = savedMap1.spawn[0]
     this.player = new Player(
       this,
-      this.world.x + 32 + 64 * playerBlockPos[0],
-      this.world.y + 32 + 64 * playerBlockPos[1],
+      0,
+      0,
       64,
       64,
       this.data.get('playerName'),
@@ -231,16 +230,11 @@ export default class HomeScene extends Phaser.Scene {
     })
 
     // Other Players
-    socket.emit('get-spawn-list', true)
-    socket.on('spawn-list', (list) => {
-      console.log(list)
-    })
 
-    const otherPlayerBlockPos = savedMap1.spawn[1]
     this.otherPlayers[0] = new Player(
       this,
-      this.world.x + 32 + 64 * otherPlayerBlockPos[0],
-      this.world.y + 32 + 64 * otherPlayerBlockPos[1],
+      -1000,
+      -1000,
       64,
       64,
       'Alice'
@@ -248,6 +242,24 @@ export default class HomeScene extends Phaser.Scene {
 
     this.data.set('players', this.getCurrentPlayer())
     this.physics.add.collider(this.player, this.walls)
+
+    // socket handler
+    socket.emit('get-spawn-list', true)
+    socket.on('spawn-list', (list) => {
+      const myId = this.data.get('playerId')
+      const players = list.players
+      const spawnIndex = list.spawnIndex
+
+      // set player position
+      const playerBlockPos =
+        savedMap1.spawn[
+          spawnIndex[players.findIndex((player) => player.id == myId)]
+        ]
+      this.player.setPosition(
+        this.world.x + 32 + 64 * playerBlockPos[0],
+        this.world.y + 32 + 64 * playerBlockPos[1]
+      )
+    })
   }
 
   public update(time: number, delta: number): void {

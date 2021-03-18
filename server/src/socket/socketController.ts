@@ -36,11 +36,14 @@ export default (server: http.Server) => {
       io.emit('game-start', state)
     })
 
-    socket.on('get-spawn-list', (state) => {
+    socket.on('get-spawn-list', () => {
       if (playerSpawn.length <= 0) {
         playerSpawn = randArr(playerList.length)
       }
-      socket.emit('spawn-list', playerSpawn)
+      socket.emit('spawn-list', {
+        players: playerList,
+        spawnIndex: playerSpawn,
+      })
     })
 
     socket.on('disconnect', (reason) => {
