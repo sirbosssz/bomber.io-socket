@@ -1,37 +1,43 @@
 version: '3.7'
 
-services: 
+services:
   backend:
-    build: 
+    build:
       context: ./server
       target: setup
     volumes:
-      - ./server:/app
+      - ./server:/app:delegated
+      - /server/app/node_modules
     command: /bin/sh -c "yarn; yarn dev"
     stdin_open: true
     tty: true
     restart: 'no'
-  
+
   frontend:
-    build: 
+    build:
       context: ./client
       target: setup
-    volumes: 
-      - ./client:/app
+    volumes:
+      - ./client:/app:delegated
+      - /client/app/node_modules
+      - type: bind
+        source: ./client
+        target: /app
+        consistency: cached
     command: /bin/sh -c "yarn; yarn start"
     stdin_open: true
     tty: true
     restart: 'no'
     ports:
-      - "8010:8010"
+      - '8010:8010'
 
   nginx:
-    ports: 
-      - "8000:80"
+    ports:
+      - '8000:80'
     volumes:
       - ./nginx/config/conf.d:/etc/nginx/conf.d
       - ./nginx/config/nginx.conf:/app/nginx/conf.d
       - ./nginx/errors:/usr/share/nginx/html/errors
     restart: 'no'
-    logging: 
+    logging:
       driver: none

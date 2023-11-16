@@ -1,4 +1,4 @@
-FROM node:15.11 AS setup
+FROM node:20-alpine AS setup
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY . ./
 
 RUN yarn build
 
-FROM node:15.11-alpine
+FROM node:20-alpine
 
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
